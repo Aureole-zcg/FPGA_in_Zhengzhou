@@ -1,6 +1,6 @@
 module add
 (
-    input wire[7:0] add_in1,
+    input wire[7:0] add_in1,//不写位宽默认为1
     input wire[7:0] add_in2,
     input wire[7:0] add_in3,
 
