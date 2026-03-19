@@ -12,6 +12,6 @@ output Y//输出端口 输出信号定义类型取决于后续赋值语句
 //赋值语句描述
 //赋值关键字 assign
 //assign：分配；指派；指定
-assign Y=~A^B;
+assign Y=A~^B;
 
 endmodule 
