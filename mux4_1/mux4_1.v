@@ -20,7 +20,7 @@ module mux4_1
 //               (sel==2'd10)? add_in2:add_in3;
 
 //第二种写法：always+三目运算符
-//always @(*)
+//always @(*)//(sel,add_in0,add_in1,add_in2,add_in3)
 //    add_out=(sel==2'd00)? add_in0:
 //               (sel==2'd01)? add_in1:
 //               (sel==2'd10)? add_in2:add_in3;
