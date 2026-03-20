@@ -5,7 +5,7 @@ module flash_led
     input wire clk,
     input wire rst_n,
 
-    output reg Y
+    output reg led
 );
 
 reg [31:0] cnt ;
@@ -21,7 +21,7 @@ end
 always @(*) 
 begin
     if (cnt<=24999999) 
-        Y=1'b0;
-    else Y=1'b1;
+        led=1'b0;
+    else led=1'b1;
 end
 endmodule
