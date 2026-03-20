@@ -1,6 +1,7 @@
-//目标：LED0.5s交替亮灭
-//使用EP4CE10F17C8，利用计数器和50MHz晶振，计数25000000个上升边沿
 module flash_led
+#(//parameter全局变量
+    parameter CNT_MAX=32'd50000000//定义参数 1s
+)
 (
     input wire clk,
     input wire rst_n,
@@ -8,19 +9,22 @@ module flash_led
     output reg led
 );
 
+//parameter CNT_MAX=32'd50000000;
+//localparam 局部变量
 reg [31:0] cnt ;
+
 always @(posedge clk , negedge rst_n)
 begin
     if(~rst_n)
         cnt<=1'd0;
-    else if(cnt<49999999)
+    else if(cnt<CNT_MAX-1)
         cnt<=cnt+1'd1;
     else cnt<=1'd0;
 end 
 
 always @(*) 
 begin
-    if (cnt<=24999999) 
+    if (cnt<=CNT_MAX/2-1) 
         led=1'b0;
     else led=1'b1;
 end
