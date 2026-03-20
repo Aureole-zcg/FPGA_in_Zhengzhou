@@ -1,5 +1,5 @@
 //led低电平点亮，1s低电平，3s高电平
-module flash_led1_3
+module flash_led
 #(//parameter全局变量定义参数
     parameter CNT1_MAX=16'd49999,//50000
     parameter CNT2_MAX=16'd4000// 50000*4000*20ns=4,000,000,000ns=4s
@@ -38,8 +38,6 @@ end
 
 always @(*) 
 begin
-    if (cnt2<=CNT2_MAX/4-1) 
-        led=1'b0;//1s低电平,led亮
-    else led=1'b1;//3s高电平,led灭
+    led=(cnt2<=CNT2_MAX/4-1) ?1'b0:1'b1;//1s低电平,led亮，3s高电平,led灭
 end
 endmodule
