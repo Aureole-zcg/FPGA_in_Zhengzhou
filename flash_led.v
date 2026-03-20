@@ -22,7 +22,16 @@ begin
     else cnt<=1'd0;
 end 
 
-always @(*) 
+//always @(posedge clk , negedge rst_n)//时序逻辑取反，翻转LED状态
+//begin
+//    if(~rst_n)
+//        led<=1'd0;
+//    else if(cnt<CNT_MAX/2-1)//0~24999999
+//        led=led;//保持
+//    else led=~led;
+//end 
+
+    always @(*) //组合逻辑
 begin
     if (cnt<=CNT_MAX/2-1) 
         led=1'b0;
