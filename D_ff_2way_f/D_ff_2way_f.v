@@ -1,6 +1,5 @@
 module D_ff_2way_f
 (
-    input wire D,
     input clk,
     input rst_n,
 
@@ -13,8 +12,8 @@ module D_ff_2way_f
 always @(negedge clk)
 begin
     if(rst_n==1'b0)
-        Q<=0;
-    else Q<=D;
+        Q<=1'b0;
+    else Q<=~Q;
     
 end
 endmodule
