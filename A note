@@ -145,7 +145,12 @@ parameter全局变量
 实例化名要写在模块参数化和端口化中间
 .sof是一种临时文件，断电丢失
 .jic文件断电不丢失，在Quartus→File→Convert Programming File中生成
-
+--------------------------------------------------------------------------------
+对于只取多位宽信号的单独一位时，o2={vec[2]}==02=vec[2]
+且assign o0 = vec[0];
+  assign o1 = vec[1];
+  assign o2 = vec[2];
+==assign {o2, o1, o0} = vec;
 assign w = a;
 assign x = b;
 assign y = b;
