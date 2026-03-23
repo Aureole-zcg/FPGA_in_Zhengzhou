@@ -12,7 +12,7 @@ begin
     rst_n=1'b1;
 end
 
-always #20 clk=~clk;
+always #10 clk=~clk;
 
 div_8 div_8_inst(
     .clk(clk),
