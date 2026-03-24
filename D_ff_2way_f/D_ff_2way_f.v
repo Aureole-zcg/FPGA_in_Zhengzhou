@@ -4,7 +4,7 @@ module D_ff_2way_f
     input rst_n,
 
     output reg Q
-);
+);//D触发器编写的二分频模块是只有两个输入
 
 //时序逻辑唯一书写表达式、
 //(posedge clk)上升沿//下降沿（negedge clk)
