@@ -26,7 +26,7 @@ begin
     if (~rst_n)
         key_out<=1'b0;
     else if (cnt==CNT_MAX-1)//最后一位计数保持，以控制按下次数
-            key_out<=1'b1;
+            key_out<=1'b1;//单独高电平表示采集到按键按下，按键标示电平
         else key_out<=1'b0;
 end
 endmodule
