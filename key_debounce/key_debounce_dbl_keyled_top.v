@@ -1,5 +1,5 @@
 //两按键按下后，相隔2S内即可翻转LED状态
-module key_debounce_dbl_led_top
+module key_debounce_dbl_keyled_top
 (
     input wire key_in1, clk, rst_n,key_in2,
 
