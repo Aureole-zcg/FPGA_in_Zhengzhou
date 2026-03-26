@@ -69,7 +69,7 @@ begin
                  		cnt_led<=cnt_led;
 				       else cnt_led<=cnt_led+1'd1;
 				       if (cnt_key_first==2'd2&&cnt_led>32'd0)
-                        out_key_led<=1'b1;
+                        out_key_led<=1'b1;//由于cnt_led没有清零，两秒内点第三次也可能翻转led
                    else out_key_led<=1'b0;
 				 end
 end
