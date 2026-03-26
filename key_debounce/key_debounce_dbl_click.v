@@ -9,7 +9,7 @@ module key_debounce_dbl_click
 localparam WAIT_TIME = 2_000_000_000;//两按键等待时间最大两秒
 localparam CNT_LED_MAX = WAIT_TIME/20-1;//99999999
 reg [31:0] cnt_led;
-wire key_out;//按键消抖输出的一个周期标志
+wire key_out;//按键消抖输出的一个时钟周期的标志
 reg [1:0]cnt_key_first;//按键已经按下一次
 reg out_key_led;
 
@@ -31,9 +31,9 @@ begin
     if (~rst_n)
         cnt_key_first<=2'd0;
     else if (key_out==1'b1)
-            cnt_key_first<=cnt_key_first+1'b1;
+            cnt_key_first<=cnt_key_first+1'b1;//第一个按键已按下
         else begin
-            cnt_key_first<=cnt_key_first;
+            cnt_key_first<=cnt_key_first;//保持记录已经按下一个按键
             if (cnt_key_first>1'b1||cnt_led==CNT_LED_MAX)//第二次按下或等待超过2s
             cnt_key_first<=2'd0;
             end   
