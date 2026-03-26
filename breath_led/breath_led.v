@@ -13,8 +13,8 @@ module breath_led
 );
 reg [15:0] clk_1s, clk_1ms, clk_1us;//计数器，记录时间
 reg led_state;//led状态翻转标志位
-localparam S_MS_MAX = 999;//秒和毫秒的计数峰值
-localparam US_MAX = 49;//50MHz晶振，1us=50T
+parameter S_MS_MAX = 16'd999;//秒和毫秒的计数峰值//localparam不能跨文件使用，为了仿真改为parameter
+parameter US_MAX = 16'd49;//50MHz晶振，1us=50T
 
 always @(posedge clk, negedge rst_n) 
 begin
@@ -33,6 +33,7 @@ begin
         clk_1ms<=16'd0;
         else if (clk_1us==US_MAX) 
 		      clk_1ms<=clk_1ms+1'b1;
+				else clk_1ms<=clk_1ms;
 end
 
 always @(posedge clk, negedge rst_n) 
@@ -43,6 +44,7 @@ begin
         clk_1s<=16'd0;
         else  if (clk_1ms==S_MS_MAX && clk_1us==US_MAX)
 		      clk_1s<=clk_1s+1'b1;
+				else clk_1s<=clk_1s;
 end
 
 always @(posedge clk, negedge rst_n)
