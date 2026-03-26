@@ -36,25 +36,25 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
 	     begin
-		  led0=1'b0;
-		  led1=1'b0;
-		  led2=1'b1;
-		  led3=1'b1;
+		  led0<=1'b0;
+		  led1<=1'b0;
+		  led2<=1'b1;
+		  led3<=1'b1;
 		  end
 		  
     else if(key_out)
 	         begin
-		      led0=~led0;
-		      led1=~led1;
-		      led2=~led2;
-		      led3=~led3;
+		      led0<=~led0;
+		      led1<=~led1;
+		      led2<=~led2;
+		      led3<=~led3;
 		      end
 		  else 
 		      begin//组合逻辑无法实现自我保持，会产生锁存器导致结果错误，自我赋值采用时序逻辑
-				led0=led0;
-		      led1=led1;
-		      led2=led2;
-		      led3=led3;
+				led0<=led0;
+		      led1<=led1;
+		      led2<=led2;
+		      led3<=led3;
 				end
 	 
 	     //begin
