@@ -1,4 +1,4 @@
-module more_led_breath_top
+module more_led_breath_top//模拟键盘跑马灯，四个led自由按照亮灭两秒呼吸
 (
     input wire clk,rst_n,//50MHz，低电平复位
 
