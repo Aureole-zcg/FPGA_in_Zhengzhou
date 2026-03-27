@@ -1,6 +1,6 @@
 module rise_fall_tb();
     reg clk, rst_n, A;
-    wire Y;
+    wire Y_rise, Y_fall;
 
 initial begin
     clk=1'b0;
@@ -18,7 +18,8 @@ rise_fall rise_fall_inst
     .clk(clk), 
     .rst_n(rst_n), 
     .A(A),
-    .Y(Y)
+    .Y_rise(Y_rise),
+	.Y_fall(Y_fall)
 );
 
 endmodule
