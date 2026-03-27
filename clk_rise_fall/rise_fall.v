@@ -1,7 +1,7 @@
 module rise_fall
 (
     input wire clk, rst_n, A,
-    output reg Y
+    output reg Y_rise, Y_fall
 );
 
 reg A_dff1, A_dff2, A_dff3;
@@ -25,9 +25,17 @@ end
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
-        Y<=1'b0;
-		  else if (A_dff2 ^ A_dff3)//根据波形图，A_dff2和A_dff3不同时，Y出现高电平标志电位
-            Y=1'b1;
-        else Y=1'b0;
+        begin
+		     Y_rise<=1'b0;
+		     Y_fall<=1'b0;
+		  end
+		  else if (A_dff2==1'b1 && A_dff3==1'b0)//根据波形图，A_dff2和A_dff3不同时，Y出现高或低电平标志电位
+            Y_rise<=1'b1;//边沿检测的上升沿检测和下降沿检测是分开进行的两个不同信号
+            else if (A_dff2==1'b0 && A_dff3==1'b1)
+		          Y_fall<=1'b1;
+					 else begin
+					 Y_rise<=1'b0;
+					 Y_fall<=1'b0;
+					 end
 end
 endmodule
