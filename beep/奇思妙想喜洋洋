@@ -1,13 +1,13 @@
 module beep_adjustable_template
 #(
-    parameter Do = 190840,//七个基础音调，音调的频率转化为时钟周期个数
+    parameter Do = 190839,//七个基础音调，音调的频率转化为时钟周期个数
     parameter Re = 170068,
     parameter Mi = 151515,
     parameter Fa = 143266,
     parameter So = 127551,
     parameter La = 113636,
     parameter Si = 101214,
-    parameter TIM = 25000000//0.5S//--------调整点1√
+    parameter TIM = 11_500_000//0.23s//0.5S==25_000_000T//--------调整点1√
 
 )
 (
@@ -23,7 +23,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
     cnt_s<=32'd0;
-    else if (cnt_s==TIM-1)//每个音调响0.5s
+    else if (cnt_s==TIM-1)//每个音调响0.23s
         cnt_s<=1'd0;
         else cnt_s<=cnt_s+1'd1;    
 end
@@ -36,7 +36,7 @@ begin
         tone_num<=32'd0;
         else if (cnt_s==TIM-1)
 		      tone_num<=tone_num+1'd1;    
-              else tone_num<=tone_num;//保持当前音调，直到0.5s计数结束
+              else tone_num<=tone_num;//保持当前音调，直到0.23s计数结束
 end
 
 always @(posedge clk, negedge rst_n) 
@@ -136,7 +136,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
     beep_out<=1'b1;
-    else if(tone_cnt<=tone>>1)//占空比50%//占空比越大声音越大//--------调整点4√
+    else if(tone_cnt<=tone>>2)//占空比25%//占空比越大声音越大//--------调整点4√
         beep_out<=1'b0;
         else beep_out<=1'b1;
 end
