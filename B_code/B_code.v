@@ -1,4 +1,3 @@
-//解码B码的时间量
 module B_code
 (
     input wire clk, rst_n, B_code_in,
@@ -150,9 +149,11 @@ begin
         year_ones    <=3'd0;
         year_tens    <=3'd0;
     end
-    else if (cnt_10ms==MS*10-1)//if (code_num==CODE_NUM_MAX)
+    else if (code_num == 8'd60)//解码完时间就输出
+	    //if (cnt_10ms==MS*10-1)得到一位时间就输出
+		 //if (code_num==CODE_NUM_MAX)解码完1s整个帧再输出
         begin
-            second_ones <={code[5]*8+code[4]*4+code[3]*2+code[2]*1};
+            second_ones <={code[5]*8+code[4]*4+code[3]*2+code[2]*1};//倒序整理后，再加权计算
             second_tens <=code[9]*4+code[8]*2+code[7]*1;
             minute_ones <=code[14]*8+code[13]*4+code[12]*2+code[11]*1;
             minute_tens <=code[18]*4+code[17]*2+code[16]*1;
