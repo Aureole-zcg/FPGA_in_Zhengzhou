@@ -63,7 +63,7 @@ begin
     cnt_H<=4'd0;
     else if (B_code_in==1'b0 )
         cnt_H<=4'd0;
-        else if (B_code_in==1'b1&&cnt_MS==MS-1)//和ms对齐,1ms计数加1
+        else if (B_code_in==1'b1&&cnt_MS==MS-1000)//和ms对齐,1ms计数加1，增加8ms±8us误差范围
             cnt_H<=cnt_H+1'b1;//计数B_code_in有几ms高电平，来判断是什么信号值
             else  cnt_H<=cnt_H;
 end
@@ -111,7 +111,7 @@ begin
             else P_num<=P_num;
         end
         else if (P_num>4'd11)
-            P_num<=4'd1;//P码元数量超过11个清零，但由于定时位前的P已经被识别成P12，导致定时时刻后的P成为P1而不是P2，所以，之后的P0成为P12
+            P_num<=4'd1;//P码元数量超过11个清零，但由于定时位前的P已经被识别成P12，导致定时时刻后的P成为P1而不是P2，所以，之后的P0均成为P12
             else P_num<=P_num;
 end
 
@@ -172,8 +172,8 @@ begin
         year_ones    <=3'd0;
         year_tens    <=3'd0;
     end
-    else if (code_num == 8'd60)//解码完时间就输出
-	    //if (cnt_10ms==MS*10-1)//得到一位时间就输出
+    else //if (code_num == 8'd60)//解码完时间就输出
+	    if (cnt_10ms==MS*10-1)//得到一位时间就输出
 		 //if (code_num==CODE_NUM_MAX)//解码完1s整个帧再输出
         begin
             second_ones <={code[5]*8+code[4]*4+code[3]*2+code[2]*1};//倒序整理后，再加权计算
