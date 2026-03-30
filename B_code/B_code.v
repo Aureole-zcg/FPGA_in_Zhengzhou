@@ -23,6 +23,8 @@ reg [7:0] code [99:0];//记录码元
 reg [7:0] code_num;//计数具体的码元号
 reg [3:0] P_num;//一共11个P
 //reg [7:0] Waiting_for_translation[99:0];//调整数据顺序来翻译二进制数
+reg B_code_D;//B码在D触发器延迟一个周期，用于触发标志
+reg flag_Bcode_Hcode_MS;//标志，对齐B码和毫秒的起始点
 
 parameter MS = 32'd125000;//MS==125000T
 parameter CODE_NUM_MAX = 8'd99;//一共100个码元，编号0-99
@@ -30,10 +32,29 @@ parameter CODE_NUM_MAX = 8'd99;//一共100个码元，编号0-99
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
+    B_code_D<= 1'b0;
+    else B_code_D<=B_code_in;//B码在D触发器延迟一个周期，用于触发标志
+end
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+    flag_Bcode_Hcode_MS<= 1'b0;
+    else if (B_code_in==1'b1 && B_code_D==1'b0)//B码上升沿和D触发器延迟后的信号间产生一个标志位，用于对齐cnt_MS和cnt_10ms
+        flag_Bcode_Hcode_MS<= 1'b1;
+        else flag_Bcode_Hcode_MS<=1'b0;
+
+end
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
     cnt_MS <= 32'd0;
-    else if (cnt_MS==MS-1)
-        cnt_MS <= 32'd0;
-        else cnt_MS <= cnt_MS+1'b1;//定义MS的计数器
+    else if (flag_Bcode_Hcode_MS==1'b1)
+        cnt_MS <= 32'd2;//使用标志位对齐B码和毫秒的起始点
+        else if (cnt_MS==MS-1)
+            cnt_MS <= 32'd0;
+            else cnt_MS <= cnt_MS+1'b1;//定义MS的计数器
 end
 
 always @(posedge clk, negedge rst_n) 
@@ -59,10 +80,12 @@ end
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
-    cnt_10ms <= 8'd0;
-    else if (cnt_10ms==MS*10-1)
-        cnt_10ms <= 8'd0;
-        else cnt_10ms <= cnt_10ms+1'b1;//定义10ms的计数器
+    cnt_10ms <= 32'd0;
+    else if (flag_Bcode_Hcode_MS==1'b1)
+        cnt_10ms <= 32'd2;//使用标志位对齐B码和毫秒的起始点
+        else if (cnt_10ms==MS*10-1)
+            cnt_10ms <= 32'd0;
+            else cnt_10ms <= cnt_10ms+1'b1;//定义10ms的计数器
 end
 
 always @(posedge clk, negedge rst_n) 
@@ -150,8 +173,8 @@ begin
         year_tens    <=3'd0;
     end
     else if (code_num == 8'd60)//解码完时间就输出
-	    //if (cnt_10ms==MS*10-1)得到一位时间就输出
-		 //if (code_num==CODE_NUM_MAX)解码完1s整个帧再输出
+	    //if (cnt_10ms==MS*10-1)//得到一位时间就输出
+		 //if (code_num==CODE_NUM_MAX)//解码完1s整个帧再输出
         begin
             second_ones <={code[5]*8+code[4]*4+code[3]*2+code[2]*1};//倒序整理后，再加权计算
             second_tens <=code[9]*4+code[8]*2+code[7]*1;
