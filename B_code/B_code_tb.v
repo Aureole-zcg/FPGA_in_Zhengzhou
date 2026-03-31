@@ -247,19 +247,43 @@ end
 
 
 
-B_code 
-#(
-    .MS(32'd125_000),
-	 .CODE_NUM_MAX(8'd99)
-)
-B_code_inst
-(
-    .clk(clk)     ,//常用b码时钟125MHz
-    .rst_n     (rst_n     )     ,//全局复位信号
-    .B_code_in (B_code_in )     ,//用于解析的b码信号
+//B_code 
+//#(
+//    .MS(32'd125_000),
+//	 .CODE_NUM_MAX(8'd99)
+//)
+//B_code_inst
+//(
+//    .clk(clk)     ,//常用b码时钟125MHz
+//    .rst_n     (rst_n     )     ,//全局复位信号
+//    .B_code_in (B_code_in )     ,//用于解析的b码信号
+//
+//    .second_ones  (),//解析b码时间（年、日、时、分、秒）
+//    .second_tens  (),//例（21年251天01：48：08）
+//    .minute_ones  (),
+//    .minute_tens  (),
+//    .hour_ones    (),
+//    .hour_tens    (),
+//    .day_ones     (),
+//    .day_tens     (),
+//    .day_hundreds (),
+//    .year_ones    (),
+//    .year_tens    () 
+//
+//);
 
-    .second_ones  (),//解析b码时间（年、日、时、分、秒）
-    .second_tens  (),//例（21年251天01：48：08）
+B_code_v2
+#(
+    .error(32'd1000)//8us;
+)
+B_code_v2_inst
+(
+    .clk(clk)     ,
+    .rst_n     (rst_n),
+    .B_code_in (B_code_in ),
+    
+    .second_ones  (),
+    .second_tens  (),
     .minute_ones  (),
     .minute_tens  (),
     .hour_ones    (),
@@ -271,10 +295,5 @@ B_code_inst
     .year_tens    () 
 
 );
-
-
-
-
-
 
 endmodule
