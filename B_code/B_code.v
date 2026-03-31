@@ -160,17 +160,17 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
     begin
-        second_ones  <=3'd0;
-        second_tens  <=2'd0;
-        minute_ones  <=3'd0;
-        minute_tens  <=2'd0;
-        hour_ones    <=3'd0;
-        hour_tens    <=1'd0;
-        day_ones     <=3'd0;
-        day_tens     <=3'd0;
-        day_hundreds <=1'd0;
-        year_ones    <=3'd0;
-        year_tens    <=3'd0;
+        second_ones  <=4'd0;
+        second_tens  <=3'd0;
+        minute_ones  <=4'd0;
+        minute_tens  <=3'd0;
+        hour_ones    <=4'd0;
+        hour_tens    <=2'd0;
+        day_ones     <=4'd0;
+        day_tens     <=4'd0;
+        day_hundreds <=2'd0;
+        year_ones    <=4'd0;
+        year_tens    <=4'd0;
     end
     else //if (code_num == 8'd60)//解码完时间就输出
 	    if (cnt_10ms==MS*10-1)//得到一位时间就输出
