@@ -145,7 +145,7 @@ assign mem[99] = 8'h30  ; //0
 
 //状态机参数定义
 
-parameter   idel  =  4'd0 ; //判断码元类型
+parameter   idle  =  4'd0 ; //判断码元类型
 parameter   s0    =  4'd1 ; //模拟发送0码元
 parameter   s1    =  4'd2 ; //模拟发送1码元
 parameter   s2    =  4'd3 ; //模拟发送p码元
@@ -163,12 +163,12 @@ begin
         begin
             num      <= 8'd96   ;//模拟系统启动接收到的B码是第96个码元开始
             cnt_10ms <= 32'd0  ;
-            state    <= idel   ;
+            state    <= idle   ;
             B_code_in<= 1'b1   ;
         end
     else
         case (state)
-            idel:											//判断码元类型，确定要模拟发送的码元
+            idle:											//判断码元类型，确定要模拟发送的码元
 				 if (mem[num] == 8'h30) 		
                      state <= s0 ;
                  else if (mem[num] == 8'h31)
@@ -233,15 +233,15 @@ begin
 				if ( num == 8'd99 ) 						
                     begin
                         num <= 8'd0 ;
-                        state <= idel  ;
+                        state <= idle  ;
                     end
                 else 
                     begin
                         num <= num + 1'b1  ;
-                        state <= idel  ;
+                        state <= idle  ;
                     end
 
-            default: state <= idel   ;
+            default: state <= idle   ;
         endcase
 end
 
