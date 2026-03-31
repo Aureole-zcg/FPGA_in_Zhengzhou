@@ -166,7 +166,7 @@ always @(posedge clk ,negedge rst_n)
 begin
     if (~rst_n) 
         begin
-            num      <= 8'd87   ;//模拟系统启动接收到的B码是第96个码元开始
+            num      <= 8'd87   ;//模拟系统启动接收到的B码是第87个码元开始
             cnt_10ms <= 32'd0  ;
             state    <= idle   ;
             B_code_in<= 1'b1   ;
