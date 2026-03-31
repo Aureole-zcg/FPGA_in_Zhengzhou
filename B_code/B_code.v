@@ -1,3 +1,4 @@
+
 module B_code
 (
     input wire clk, rst_n, B_code_in,
@@ -109,6 +110,9 @@ begin
             if (H_num == 4'd8)
             P_num<=P_num+1'b1;//记录P码元的数量，来判断是哪个P码元
             else P_num<=P_num;
+				if (code_num==2'd2 && P_num<4'd2)//双P检测失败则状态清零
+				P_num<=4'd0;
+				
         end
         else if (P_num>4'd11)
             P_num<=4'd1;//P码元数量超过11个清零，但由于定时位前的P已经被识别成P12，导致定时时刻后的P成为P1而不是P2，所以，之后的P0均成为P12
