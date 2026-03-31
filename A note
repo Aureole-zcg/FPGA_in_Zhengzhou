@@ -155,3 +155,17 @@ assign w = a;
 assign x = b;
 assign y = b;
 assign z = c;//==assign w=a,x=b,y=b,z=c; ==assign {w,x,y,z} = {a,b,b,c};
+
+JTAG是联合测试工作组（Joint Test Action Group）的简称，是在名为标准测试访问端口和边界扫描结构的IEEE的
+标准1149.1的常用名称。此标准用于验证设计与测试生产出的印刷电路板功能。
+连接引脚
+1.
+TDI（测试数据输入）
+2.
+TDO（测试数据输出）
+3.
+TCK（测试时钟）
+4.
+TMS（测试模式选择）
+5.
+TRST（测试复位）可选。
