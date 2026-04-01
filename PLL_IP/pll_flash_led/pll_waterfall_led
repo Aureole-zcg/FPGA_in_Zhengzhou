@@ -1,3 +1,4 @@
+//闪光灯，用这个200Mhz的时钟，编写闪光灯模块（1个LED灯1秒亮灭循环）
 module pll_waterfall_led
 (
     input wire clk, rst_n,
