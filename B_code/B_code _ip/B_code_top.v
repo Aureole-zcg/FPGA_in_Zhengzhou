@@ -37,8 +37,8 @@ pll_ip_B	pll_ip_B_inst (
  )
  B_generation_inst
 (
-    .clk_125MHz(clk_125MHz), 
-    .rst_n(locked),//125Mhz时钟
+    .clk_125MHz(clk_125MHz), //125Mhz时钟
+	.rst_n(locked),//PLL——IP核输出的锁定信号locked在输出时钟稳定后拉高，与rst_n在不复位时也为高电平相同，所以可以代替掉rst_n
     .B_code_out(B_code_out)//输出B码
 );
 
