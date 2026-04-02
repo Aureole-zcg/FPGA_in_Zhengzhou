@@ -1,7 +1,6 @@
 module B_code_top
 (
     input wire clk, rst_n,
-    output wire locked,
     output wire [3:0] second_ones  ,
     output wire [2:0] second_tens  ,
     output wire [3:0] minute_ones  ,
@@ -14,6 +13,12 @@ module B_code_top
     output wire [3:0] year_ones    ,
     output wire [3:0] year_tens    
 );
+
+//定义转接线
+wire clk_125MHz ;//125MHz时钟
+wire locked;//锁定信号
+wire B_code_out  ;//B码输出
+
 
 pll_ip_B	pll_ip_B_inst (
 	.areset ( ~rst_n ),
@@ -33,7 +38,7 @@ pll_ip_B	pll_ip_B_inst (
  B_generation_inst
 (
     .clk_125MHz(clk_125MHz), 
-    .rst_n(rst_n),//125Mhz时钟
+    .rst_n(locked),//125Mhz时钟
     .B_code_out(B_code_out)//输出B码
 );
 
@@ -47,7 +52,7 @@ B_code_v2
 B_code_v2_inst
 (
     .clk_125MHz(clk_125MHz)     ,
-    .rst_n     (rst_n),
+    .rst_n     (locked),
     .B_code_in (B_code_out ),
     
     .second_ones  (second_ones ),
