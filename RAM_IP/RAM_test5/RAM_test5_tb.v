@@ -54,8 +54,8 @@ begin
         else 
             begin
                 wren   <= 1'b0;
-                wraddr <= 8'b0;
-                data   <= 31'd0;
+                wraddr <= 5'b0;
+                data   <= 4'd0;
             end
 end
 
@@ -65,7 +65,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
     rden <= 1'b0;
-    else if (cnt >= 10'd33 && cnt <= 10'd127)//33~127
+    else if (cnt >= 10'd33 && cnt <= 10'd64)//33~64
         rden <= 1'b1;//读取
         else rden <= 1'b0;
 end
@@ -73,9 +73,15 @@ end
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
-    rdaddr <= 10'd16;
-    else if(rden)
-        rdaddr <= rdaddr + 1'b1;//自加读取，溢出清零
+    rdaddr <= 10'd0;
+    else begin
+        if(cnt >= 10'd33 && cnt <= 10'd48)//16~31
+        rdaddr <= cnt - 10'd17;//自加读取，溢出清零
+            else if(cnt >= 10'd49 && cnt <= 10'd64)//0~15
+            rdaddr <= cnt - 10'd49;//自加读取，溢出清零
+                else rdaddr <= 10'd0;
+    end
+    
 end
 
 RAM_test5 RAM_test5_inst
