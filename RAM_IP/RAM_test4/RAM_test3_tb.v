@@ -41,7 +41,7 @@ begin
     begin
         wren   <= 1'b0;
         wraddr <= 8'b0;
-        data   <= 31'd0;
+        data   <= 32'd0;
     end
     else if (cnt >= 10'd1 && cnt <= 10'd18)
         begin
@@ -55,13 +55,18 @@ begin
                 wraddr <= cnt - 10'd2;//18~26
                 data <= cnt - 10'd2;//18~26
             end
-            else if (cnt > 10'd257)
+            else if (cnt == 10'd29)
                 begin
-                    wren   <= 1'b0;
-                    wraddr <= 8'b0;
-                    data   <= 31'd0;
+                    wren   <= 1'b1;//写入
+                    wraddr <= cnt - 10'd2;//27
+                    data   <= 32'd6782;//32'h1A7E//读8'h7E和8'h1A
                 end
-                else wren   <= 1'b0;
+                else 
+					 begin
+					      wren   <= 1'b0;
+                     wraddr <= 8'b0;
+                     data   <= 32'd0;
+					 end
 end
 
 //倒序地址输出
@@ -70,7 +75,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
     rden <= 1'b0;
-    else if (cnt >= 10'd30 && cnt <= 10'd134)//26*4->>0~104
+    else if (cnt >= 10'd30 && cnt <= 10'd101 ||cnt >= 10'd107 && cnt <= 10'd146)//18*4=72 10*4=40
         rden <= 1'b1;//读取
         else rden <= 1'b0;
 end
@@ -79,9 +84,14 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
     rdaddr <= 10'b0;
-    else if(rden)
+    else begin 
+	 if(rden)
         rdaddr <= rdaddr + 1'b1;//自加读取
-        else rdaddr <= 10'b0;
+		  else rdaddr <= rdaddr;
+    if (rdaddr == 10'd112)
+	 rdaddr <= 10'b0;
+	 
+	 end
 end
 
 RAM_test3 RAM_test3_inst
