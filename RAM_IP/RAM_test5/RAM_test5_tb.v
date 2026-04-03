@@ -76,9 +76,9 @@ begin
     rdaddr <= 10'd0;
     else begin
         if(cnt >= 10'd33 && cnt <= 10'd48)//16~31
-        rdaddr <= cnt - 10'd17;//自加读取，溢出清零
+        rdaddr <= cnt - 10'd17;//16~31
             else if(cnt >= 10'd49 && cnt <= 10'd64)//0~15
-            rdaddr <= cnt - 10'd49;//自加读取，溢出清零
+            rdaddr <= cnt - 10'd49;//0~15
                 else rdaddr <= 10'd0;
     end
     
