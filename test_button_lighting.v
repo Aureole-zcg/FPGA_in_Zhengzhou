@@ -120,7 +120,7 @@ reg [31:0] cnt_1s;
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
-       cnt_1s <= 32'd0;//50_000_000T
+       cnt_1s <= 32'd0;//1000*1ms
     else if (cnt_1s ==  MAX_PWM_CNT && cnt_1ms ==  MAX_PWM_CNT && cnt_1us ==  MAX_20ms/20/1000-1)
             cnt_1s <= 32'd0;
             else if (cnt_1ms ==  MAX_PWM_CNT && cnt_1us ==  MAX_20ms/20/1000-1)
