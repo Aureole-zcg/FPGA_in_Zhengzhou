@@ -70,13 +70,13 @@ begin
 		 //	    flag_num <= 3'd0;
 		 //     else flag_num <= flag_num;
 		  //************************************************
-		  //上述代码会4s后自动熄灭
+		  //上述代码会4s后led自动熄灭
 		  else if (cnt_4s ==  32'd0 && flag == 1'b1)
 		      flag_num <= 3'd1;
             else if (flag == 1'b1)
                     flag_num <= flag_num +1'b1;
                     else if (flag_num > 4 )//按下次数5以上，或者时间超过四秒再按均下一次熄灭
-                            flag_num <= 3'd0;	  
+                            flag_num <= flag_num;	  
                         else flag_num <= flag_num;
 end
 
