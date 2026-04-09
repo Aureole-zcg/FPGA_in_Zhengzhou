@@ -128,13 +128,27 @@ begin
             else cnt_1s <= cnt_1s;
 end
 
+/***********************************************************************************/
+reg [2:0] state;//用于4秒后再改变led状态
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+	     state <= 3'd0;
+    else if (cnt_4s ==  MAX_4s-1)
+	     state <= flag_num;
+		  else state <= state;
+end
+/***********************************************************************************/
+
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
         led <= 1'b0;
     else 
 	    begin
-           case(flag_num)
+           case(state)//4秒后再改变led状态
+			      //(flag_num)//按键按下就直接改变状态
                2:led <= 1'b0;
                3:begin
                    if (cnt_500ms == 0)
