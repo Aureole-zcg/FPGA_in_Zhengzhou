@@ -1,0 +1,83 @@
+module reverse
+(
+    input wire clk,
+    input wire rst_n,
+    input wire [15:0] data_ram_in,
+    input wire flag_ramdbl_rden,
+
+    output reg [15:0] q_reverse
+);
+
+reg flag_ramdbl_rden_D;
+reg flag_ramdbl_rden_DD;
+reg flag_ramdbl_rden_fall;
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+    begin
+        flag_ramdbl_rden_D <= 1'b0;
+        flag_ramdbl_rden_DD <= 1'b0;
+        flag_ramdbl_rden_fall <= 1'b0;
+    end
+    else begin
+        flag_ramdbl_rden_D <= flag_ramdbl_rden;
+        flag_ramdbl_rden_DD <= flag_ramdbl_rden_D;
+		  flag_ramdbl_rden_fall <= flag_ramdbl_rden_DD && ~flag_ramdbl_rden_D;
+    end
+end
+
+reg [11:0] cnt_add;//0~2048
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+        cnt_add <= 12'd0;
+    else if (flag_ramdbl_rden)
+        cnt_add <= cnt_add +1'b1; //1~2048
+        else cnt_add <= 12'd0;
+end
+
+reg [15:0] q_reverse_r [2047: 0];
+reg [10:0] i;
+
+always @(posedge clk, negedge rst_n) //正序寄存
+begin
+    if (~rst_n)
+        for (i = 0; i < 11'd2047; i = i + 1)
+            q_reverse_r[i] <= 16'd0;
+    else if (cnt_add >= 1'b1)
+        q_reverse_r[cnt_add-1] <= data_ram_in;
+end
+
+reg [10:0] cnt_sub;//递减计数器，2047~0
+always @(posedge clk, negedge rst_n) //2047~0
+begin
+    if (~rst_n)
+        cnt_sub <= 11'd2047;
+    else if (flag_ramdbl_rden_fall)
+        cnt_sub <= cnt_sub - 1'b1; 
+        else if (cnt_sub <= 11'd2046 && cnt_sub > 1'b0)
+            cnt_sub <= cnt_sub - 1'b1;
+            else cnt_sub <= 11'd2047;
+end
+
+reg [10:0] cnt_sub_r;
+
+always @(posedge clk, negedge rst_n) begin
+    if (~rst_n) begin
+        q_reverse <= 16'd0;
+        cnt_sub_r <= 11'd0;
+    end
+    else if (flag_ramdbl_rden_fall || cnt_sub <= 11'd2046) begin
+        // 在第1拍，寄存读取地址和读取操作
+        cnt_sub_r <= cnt_sub;
+        // 在第2拍，RAM输出数据，此时将数据寄存输出
+        q_reverse <= q_reverse_r[cnt_sub_r];
+    end
+    else begin
+        q_reverse <= q_reverse;
+    end
+end
+
+endmodule
