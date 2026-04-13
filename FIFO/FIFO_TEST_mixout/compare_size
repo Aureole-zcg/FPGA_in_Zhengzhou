@@ -1,0 +1,101 @@
+module compare_size
+(
+    input wire clk,
+    input wire rst_n,
+    input wire [15:0] data_ram_in,
+    input wire flag_ramdbl_rden,
+
+    output reg [15:0] q_max    ,
+    output reg [10:0] addr_max 
+);
+
+
+
+//flag_ramdbl_rden_D用于累加地址计数器cnt_addr，同时再传地址计数器给读数据同步地址addr_sync_data
+//flag_ramdbl_rden_DD用来触发读出数据比较q_max和地址记录addr_max
+//数据同步地址addr_sync_data延迟一个时钟周期addr_sync_data_D作为最后输出的触发条件
+
+reg flag_ramdbl_rden_D;
+//reg flag_ramdbl_rden_DD;
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+    begin
+        flag_ramdbl_rden_D <= 1'b0;
+        //flag_ramdbl_rden_DD <= 1'b0;
+    end
+    else begin
+        flag_ramdbl_rden_D <= flag_ramdbl_rden;
+        //flag_ramdbl_rden_DD <= flag_ramdbl_rden_D;
+    end
+end
+
+reg [10:0] cnt_addr;//0~2047
+reg [10:0] addr_sync_data;
+reg [10:0] addr_sync_data_D;
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+    begin 
+        cnt_addr <= 11'd0;
+        addr_sync_data <= 11'd0;
+        addr_sync_data_D <= 11'd0;
+    end
+    else if (flag_ramdbl_rden_D)
+        begin
+            cnt_addr <= cnt_addr +1'b1; //1~2048
+            addr_sync_data <= cnt_addr;
+            addr_sync_data_D <= addr_sync_data;
+        end
+        else 
+        begin
+            cnt_addr <= 11'd0;
+            addr_sync_data <= 11'd0;
+            addr_sync_data_D <= 11'd0;
+        end
+end
+
+
+reg [15:0] q_max_r   ;
+reg [10:0] addr_max_r;
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+    begin 
+        q_max_r <= 16'd0;
+        addr_max_r <= 11'd0;
+    end
+    else if (flag_ramdbl_rden_D)
+        begin
+            if (data_ram_in >= q_max_r)
+                q_max_r <= data_ram_in; //传递最大值
+                addr_max_r <= addr_sync_data;//传递最大值地址
+        end
+        else 
+        begin
+            q_max_r <= q_max_r;
+            addr_max_r <= addr_max_r;
+        end
+end
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if (~rst_n)
+    begin 
+        q_max <= 16'd0;
+        addr_max <= 11'd0;
+    end
+    else if (addr_sync_data_D == 11'd2047)
+        begin
+        q_max <= q_max_r; //传递最大值
+        addr_max <= addr_max_r;//传递最大值地址
+        end
+        else 
+        begin
+            q_max <= q_max;
+            addr_max <= addr_max;
+        end
+end
+endmodule
