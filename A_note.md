@@ -604,6 +604,43 @@ MSB LSB最高有效位 最低有效位
 实例化放在变量声明之前，会导致重复声明错误。这是因为 Verilog 编译器在处理实例化时，如果端口连接列表中的信号（如 .data(data) 中的 data）在之前没有声明过，会隐式地将其声明为 1 位 wire（或者根据上下文推断为 wire）。随后，在实例化后面又显式声明了 reg [7:0] data、reg wrreq 等，于是这些信号就被重复声明了，从而报错。  
 而把变量声明放在实例化之前，这些信号已经存在，实例化中只是使用它们，不会产生隐式声明，因此没有冲突。  
 
+2026/4/15
+---
+genvar i;//使用循环的时候，先用genvar声明1个正整数变量，用于循环控制  
+generate for (i=1;1<=4;i=i+1) begin:INST_TEST  
+模块名 实例化名  
+(  
+    . 端口1（中间量1[i]),  
+    . 端口2（中间量2[i]),  
+);  
+实例化名后不用加[i]  
+generate主要功能是复制重复的语句  
+rtl中使用generate 需要搭配endgenerate
+
+输入输出端口不支持数组类型，只支持信号线
+
+generate_for 是用于复制模块，而 generate_if 则是根据模块的参数（必须是常量） 作为条件判断，来生产满足条件的电路 
+例：  
+module if_test(  
+input wire a,  
+input wire b,  
+input wire c,  
+output wire d  
+);
+ 
+localparam WIDE = 8; //参数定义
+ 
+generate   
+if(WIDE<10)  
+  assign d = a|b|c ; //当WIDE小于10，执行这一行代码  
+else  
+  assign d = a&b&c; // 否则执行这一行代码  
+ 
+endgenerate
+ 
+endmodule
+ 
+总结：利用generate和if配合使用，可以选择执行某一部分的代码
 
 
 
