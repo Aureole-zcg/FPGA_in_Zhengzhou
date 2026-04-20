@@ -1,4 +1,4 @@
-<img width="1211" height="359" alt="image" src="https://github.com/user-attachments/assets/0d58921b-d0d5-4fe0-ac5a-860bd52c56b8" />FPGA(Field Programmable Gate Array) 现场可编程门阵列  
+FPGA(Field Programmable Gate Array) 现场可编程门阵列  
 CPLD(Complex Programmable Logic Device) 复杂可编程逻辑器件
 
 模块三（、四）要素  
@@ -682,7 +682,7 @@ LSB                                                            MSB
 ```
 每移动一位，sck一个上升沿，移动到最后一位后，上一串sck之后下一串sck之前，rck来一个上升沿锁存  
 为了获取满足采集条件的数据的建立时间和保持时间，采集时上升沿选在数据的中间  
-<img width="764" height="572" alt="image" src="https://github.com/user-attachments/assets/4d0f552d-bdb3-4152-adc7-26904d5381f1" />
+<img width="382" height="286" alt="image" src="https://github.com/user-attachments/assets/4d0f552d-bdb3-4152-adc7-26904d5381f1" />
 
 
 2026/4/17
