@@ -720,7 +720,7 @@ VGA一秒产生的像素点数（行扫描周期*场扫描周期*帧率），大
 
 RGB888选高位转565，565转888先放置高位，然后低位复制高位后三位
 
-<img width="1211" height="359" alt="image" src="https://github.com/user-attachments/assets/d4323762-d580-4a4d-bc11-8d037dbc76dd" />
+<img width="560.5" height="179.5" alt="image" src="https://github.com/user-attachments/assets/d4323762-d580-4a4d-bc11-8d037dbc76dd" />
 
 <img width="955" height="746" alt="image" src="https://github.com/user-attachments/assets/d2bdc27e-218a-4698-9a2d-85db95158559" />
 
