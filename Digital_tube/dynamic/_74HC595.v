@@ -41,9 +41,9 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
         shcp <= 1'b0;
-    else if (cnt >= 2'd2)
+    else if (cnt == 2'd1)
             shcp <= 1'b1;
-            else if (cnt >= 2'd0)
+            else if (cnt == 2'd3)
                 shcp <= 1'b0;
                 else shcp <= shcp;
 end
