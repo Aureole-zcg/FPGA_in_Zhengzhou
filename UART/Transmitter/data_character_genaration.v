@@ -1,3 +1,4 @@
+//发送固定字符串，修改参数和ASCII16进制编码可修改
 module data_character_genaration
 #(
     parameter MAX_1s = 49_999_999, //50MHz 1s=50_000_000T
@@ -19,7 +20,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
         cnt_time <= 26'd0;
-    else if (cnt_time == MAX_40ms)
+    else if (cnt_time == MAX_40ms)//单个字符生成发送时长
         cnt_time <= 26'd0;
         else cnt_time <= cnt_time + 1'b1;
 end
@@ -28,13 +29,14 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
         character_cnt <= 8'd0;
-    else if (cnt_time == MAX_40ms && character_cnt == character_NUM)
+    else if (cnt_time == MAX_40ms && character_cnt == character_NUM)//发送字符数量
         character_cnt <= 8'd0;
         else if (cnt_time == MAX_40ms)
             character_cnt <= character_cnt + 1'b1;
             else character_cnt <= character_cnt;
 end
 
+//ASCII编码对应字符计数器值
 always @(posedge clk, negedge rst_n) 
 begin
     if (~rst_n)
