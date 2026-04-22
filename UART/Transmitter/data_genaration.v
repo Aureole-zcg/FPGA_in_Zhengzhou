@@ -1,3 +1,4 @@
+//每秒发送0~8
 module data_genaration
 #(
     parameter MAX_1s = 49_999_999 //50MHz 1s=50_000_000T
