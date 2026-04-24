@@ -76,7 +76,7 @@ begin
         7 : tx <= data[5];
         8 : tx <= data[6];
         9 : tx <= data[7];
-        default : tx <= 1'b1;//空闲状态
+        default : tx <= 1'b1;//停止位和空闲状态
         endcase
     end    
 end
