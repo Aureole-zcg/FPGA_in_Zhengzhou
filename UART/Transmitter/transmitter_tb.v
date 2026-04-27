@@ -25,6 +25,7 @@ transmitter transmitter_inst
     .clk(clk),
     .rst_n(rst_n),
 
-    .tx()
+    .tx(),
+    .done()
 );
 endmodule
