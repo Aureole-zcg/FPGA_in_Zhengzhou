@@ -6,7 +6,7 @@ module transmitter
 (
     input wire clk, rst_n, 
 
-    output reg tx
+    output reg tx, done
 );
 
 localparam  Bound_MAX = SYS_CLK / UART_BPS;
@@ -31,7 +31,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
         tx_en <= 1'b0;
-    else if (bit_flag == 1'b1 && bit_cnt == 4'd9)
+    else if (bit_flag == 1'b1 && bit_cnt == 4'd10)
             tx_en <= 1'b0;
         else if (data_flag)
                 tx_en <= 1'b1;
@@ -62,7 +62,7 @@ always @(posedge clk, negedge rst_n)
 begin
     if (~rst_n)
         bit_cnt <= 4'd0;
-    else if (bit_cnt == 4'd9 && bit_flag == 1'b1)
+    else if (bit_cnt == 4'd10 && bit_flag == 1'b1)//发送完毕
             bit_cnt <= 4'd0;
         else if (bit_flag == 1'b1)
                 bit_cnt <= bit_cnt + 1'b1;
@@ -85,8 +85,18 @@ begin
         7 : tx <= data[5];
         8 : tx <= data[6];
         9 : tx <= data[7];
-        default : tx <= 1'b1;//停止位和空闲状态
+        10: tx <= 1'b1;//停止位1bit
+        default : tx <= 1'b1;//空闲状态
         endcase
     end    
+end
+
+always @(posedge clk, negedge rst_n) 
+begin
+    if(~rst_n)
+        done <= 1'b0;
+    else if (bit_cnt == 4'd10 && bit_flag == 1'b1)    
+            done <= 1'b1;//发送完毕标志
+        else done <= 1'b0;//单周期标志
 end
 endmodule
