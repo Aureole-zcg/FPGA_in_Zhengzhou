@@ -840,12 +840,21 @@ EP4CE10F17C8有8个bank
 丢包处理（稳定性处理）  
 由于系统开始工作时，最开始接收到的信号可能有不稳定的因素产生，所以丢弃系统刚启动时携带的第一包数据，从第二包数据开始之后都可以正常使用
 
+```task框架
+task  任务名称(input 位宽 输入变量);  
+    integer	i;  
+    for(i=0;i<10;i=i+1)  
+	循环体               
+endtask  
+```
+```e.g.
+task	top_2();  
+	integer	j;  
+	for(j=0;j<=199;j=j+1)	  //调用 top_1 任务200次  
+		top_1(a_mem[j]);  	
+	endtask
+```
 
->task	top_2();  
->	integer	j;  
->	for(j=0;j<=199;j=j+1)	  //调用 top_1 任务200次  
->		top_1(a_mem[j]);  	
->	endtask
 
 
 
