@@ -20,6 +20,7 @@ initial begin
     #1228
     spi_en = 1'b1;
     spi_wrdata = 8'b10101010;
+    spi_wrdata_width = 8'd8;
     #40
     spi_en = 1'b0;
     spi_wrdata = 8'b10101010;
@@ -27,7 +28,7 @@ end
 
 always #20 div_clk = ~div_clk;//25MHz
 
-MOSI MOSI_inst
+MOSIx8 MOSIx8_inst
 (
     . div_clk         (div_clk         ),//SPI使用分频过的低频时钟
     . rst_n           (rst_n           ),
