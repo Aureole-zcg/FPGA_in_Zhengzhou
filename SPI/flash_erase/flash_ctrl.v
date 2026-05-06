@@ -1,6 +1,6 @@
 module flash_ctrl
 #(
-    parameter MAX_1S = 10_000_000,//10MHz T=100ns 1ms=10_000T//上电等待
+    parameter MAX_1S = 50_000_000,//50MHz T=20ns //上电等待
     parameter MAX_index = 1 //索引最大值
 )
 (
@@ -17,7 +17,8 @@ module flash_ctrl
 assign data_width = 8'd8;
 assign spi_cmd = 2'b00;
 
-reg [15:0] cnt_1s;
+reg [31:0] cnt_1s;
+
 reg [7:0] index;//数据号
 wire [7:0] spi_wrdata;//数据值
 
@@ -31,7 +32,7 @@ w25q16jv_cmd w25q16jv_cmd_inst
 always @(posedge clk_10MHz, negedge rst_n) 
 begin
     if (~rst_n)
-        cnt_1s <= 16'd0;
+        cnt_1s <= 32'd0;
     else if (cnt_1s < MAX_1S)
             cnt_1s <= cnt_1s +1'b1;
             else cnt_1s <= cnt_1s;
