@@ -1,0 +1,6 @@
+//rom8x256更改，实际为8x4096
+set_global_assignment -name IP_TOOL_NAME "ROM: 1-PORT"
+set_global_assignment -name IP_TOOL_VERSION "13.0"
+set_global_assignment -name VERILOG_FILE [file join $::quartus(qip_path) "rom8x256.v"]
+set_global_assignment -name MISC_FILE [file join $::quartus(qip_path) "rom8x256_inst.v"]
+set_global_assignment -name MISC_FILE [file join $::quartus(qip_path) "rom8x256_bb.v"]
