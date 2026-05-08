@@ -139,8 +139,10 @@ begin
         cnt_band_bit <= 16'd0;
     else if (cnt_band_bit == spi_wrdata_num * spi_wrdata_width)//输入所有数据的bit个数
             cnt_band_bit <= cnt_band_bit;
-        else if ((state == s1 || state == s6))
-                cnt_band_bit <= cnt_band_bit + 1'b1;
+        else if (state == s1 && cnt_band_bit == 16'd8)
+                cnt_band_bit <= cnt_band_bit;
+            else if (state == s1 || state == s6)
+                    cnt_band_bit <= cnt_band_bit + 1'b1;
 end
 
 
