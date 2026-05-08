@@ -1,0 +1,299 @@
+
+module w25q16jv_cmd
+(
+	input wire [15:0] index,//索引
+
+	output wire [7:0] spi_wrdata,
+   output wire [7:0] spi_wrdata_width,//输入数据宽度
+   output wire [15:0] spi_wrdata_num//输入数据数量
+);
+
+assign spi_wrdata_width = 8'd8;
+assign spi_wrdata_num = 16'd260;
+
+wire [7:0] cmd_data[0:260];
+   //assign cmd_data[0] = {8'h06};//写使能
+   //assign cmd_data[1] = {8'hc7};//芯片擦除
+   //assign cmd_data[1] = {8'h02};//页编程
+   //assign cmd_data[2] = {8'h07};//块编号block num
+   //assign cmd_data[3] = {8'h78};//扇区编号 页编号
+   //assign cmd_data[4] = {8'h00};//地址字节
+   
+//assign cmd_data[0  ]={8'h06};//写使能
+assign cmd_data[0  ]={8'h03};//读数据
+assign cmd_data[1  ]={8'h07};//块编号block num
+assign cmd_data[2  ]={8'h78};//扇区编号 页编号
+assign cmd_data[3  ]={8'h00};//地址字节
+assign cmd_data[4  ]={8'h00};//均为数据
+assign cmd_data[5  ]={8'h01};	
+assign cmd_data[6  ]={8'h02};	
+assign cmd_data[7  ]={8'h03};	
+assign cmd_data[8  ]={8'h04};	
+assign cmd_data[9  ]={8'h05};	
+assign cmd_data[10 ]={8'h06};	
+assign cmd_data[11 ]={8'h07};	
+assign cmd_data[12 ]={8'h08};	
+assign cmd_data[13 ]={8'h09};	
+assign cmd_data[14 ]={8'h0A};	
+assign cmd_data[15 ]={8'h0B};	
+assign cmd_data[16 ]={8'h0C};	
+assign cmd_data[17 ]={8'h0D};	
+assign cmd_data[18 ]={8'h0E};	
+assign cmd_data[19 ]={8'h0F};	
+assign cmd_data[20 ]={8'h10};	
+assign cmd_data[21 ]={8'h11};	
+assign cmd_data[22 ]={8'h12};	
+assign cmd_data[23 ]={8'h13};	
+assign cmd_data[24 ]={8'h14};	
+assign cmd_data[25 ]={8'h15};	
+assign cmd_data[26 ]={8'h16};	
+assign cmd_data[27 ]={8'h17};	
+assign cmd_data[28 ]={8'h18};	
+assign cmd_data[29 ]={8'h19};	
+assign cmd_data[30 ]={8'h1A};	
+assign cmd_data[31 ]={8'h1B};	
+assign cmd_data[32 ]={8'h1C};	
+assign cmd_data[33 ]={8'h1D};	
+assign cmd_data[34 ]={8'h1E};	
+assign cmd_data[35 ]={8'h1F};	
+assign cmd_data[36 ]={8'h20};	
+assign cmd_data[37 ]={8'h21};	
+assign cmd_data[38 ]={8'h22};	
+assign cmd_data[39 ]={8'h23};	
+assign cmd_data[40 ]={8'h24};	
+assign cmd_data[41 ]={8'h25};	
+assign cmd_data[42 ]={8'h26};	
+assign cmd_data[43 ]={8'h27};	
+assign cmd_data[44 ]={8'h28};	
+assign cmd_data[45 ]={8'h29};	
+assign cmd_data[46 ]={8'h2A};	
+assign cmd_data[47 ]={8'h2B};	
+assign cmd_data[48 ]={8'h2C};	
+assign cmd_data[49 ]={8'h2D};	
+assign cmd_data[50 ]={8'h2E};	
+assign cmd_data[51 ]={8'h2F};	
+assign cmd_data[52 ]={8'h30};	
+assign cmd_data[53 ]={8'h31};	
+assign cmd_data[54 ]={8'h32};	
+assign cmd_data[55 ]={8'h33};	
+assign cmd_data[56 ]={8'h34};	
+assign cmd_data[57 ]={8'h35};	
+assign cmd_data[58 ]={8'h36};	
+assign cmd_data[59 ]={8'h37};	
+assign cmd_data[60 ]={8'h38};	
+assign cmd_data[61 ]={8'h39};	
+assign cmd_data[62 ]={8'h3A};	
+assign cmd_data[63 ]={8'h3B};	
+assign cmd_data[64 ]={8'h3C};	
+assign cmd_data[65 ]={8'h3D};	
+assign cmd_data[66 ]={8'h3E};	
+assign cmd_data[67 ]={8'h3F};	
+assign cmd_data[68 ]={8'h40};	
+assign cmd_data[69 ]={8'h41};	
+assign cmd_data[70 ]={8'h42};	
+assign cmd_data[71 ]={8'h43};	
+assign cmd_data[72 ]={8'h44};	
+assign cmd_data[73 ]={8'h45};	
+assign cmd_data[74 ]={8'h46};	
+assign cmd_data[75 ]={8'h47};	
+assign cmd_data[76 ]={8'h48};	
+assign cmd_data[77 ]={8'h49};	
+assign cmd_data[78 ]={8'h4A};	
+assign cmd_data[79 ]={8'h4B};	
+assign cmd_data[80 ]={8'h4C};	
+assign cmd_data[81 ]={8'h4D};	
+assign cmd_data[82 ]={8'h4E};	
+assign cmd_data[83 ]={8'h4F};	
+assign cmd_data[84 ]={8'h50};	
+assign cmd_data[85 ]={8'h51};	
+assign cmd_data[86 ]={8'h52};	
+assign cmd_data[87 ]={8'h53};	
+assign cmd_data[88 ]={8'h54};	
+assign cmd_data[89 ]={8'h55};	
+assign cmd_data[90 ]={8'h56};	
+assign cmd_data[91 ]={8'h57};	
+assign cmd_data[92 ]={8'h58};	
+assign cmd_data[93 ]={8'h59};	
+assign cmd_data[94 ]={8'h5A};	
+assign cmd_data[95 ]={8'h5B};	
+assign cmd_data[96 ]={8'h5C};	
+assign cmd_data[97 ]={8'h5D};	
+assign cmd_data[98 ]={8'h5E};	
+assign cmd_data[99 ]={8'h5F};	
+assign cmd_data[100]={8'h60};	
+assign cmd_data[101]={8'h61};	
+assign cmd_data[102]={8'h62};	
+assign cmd_data[103]={8'h63};	
+assign cmd_data[104]={8'h64};	
+assign cmd_data[105]={8'h65};	
+assign cmd_data[106]={8'h66};	
+assign cmd_data[107]={8'h67};	
+assign cmd_data[108]={8'h68};	
+assign cmd_data[109]={8'h69};	
+assign cmd_data[110]={8'h6A};	
+assign cmd_data[111]={8'h6B};	
+assign cmd_data[112]={8'h6C};	
+assign cmd_data[113]={8'h6D};	
+assign cmd_data[114]={8'h6E};	
+assign cmd_data[115]={8'h6F};	
+assign cmd_data[116]={8'h70};	
+assign cmd_data[117]={8'h71};	
+assign cmd_data[118]={8'h72};	
+assign cmd_data[119]={8'h73};	
+assign cmd_data[120]={8'h74};	
+assign cmd_data[121]={8'h75};	
+assign cmd_data[122]={8'h76};	
+assign cmd_data[123]={8'h77};	
+assign cmd_data[124]={8'h78};	
+assign cmd_data[125]={8'h79};	
+assign cmd_data[126]={8'h7A};	
+assign cmd_data[127]={8'h7B};	
+assign cmd_data[128]={8'h7C};	
+assign cmd_data[129]={8'h7D};	
+assign cmd_data[130]={8'h7E};	
+assign cmd_data[131]={8'h7F};	
+assign cmd_data[132]={8'h80};	
+assign cmd_data[133]={8'h81};	
+assign cmd_data[134]={8'h82};	
+assign cmd_data[135]={8'h83};	
+assign cmd_data[136]={8'h84};	
+assign cmd_data[137]={8'h85};	
+assign cmd_data[138]={8'h86};	
+assign cmd_data[139]={8'h87};	
+assign cmd_data[140]={8'h88};	
+assign cmd_data[141]={8'h89};	
+assign cmd_data[142]={8'h8A};	
+assign cmd_data[143]={8'h8B};	
+assign cmd_data[144]={8'h8C};	
+assign cmd_data[145]={8'h8D};	
+assign cmd_data[146]={8'h8E};	
+assign cmd_data[147]={8'h8F};	
+assign cmd_data[148]={8'h90};	
+assign cmd_data[149]={8'h91};	
+assign cmd_data[150]={8'h92};	
+assign cmd_data[151]={8'h93};	
+assign cmd_data[152]={8'h94};	
+assign cmd_data[153]={8'h95};	
+assign cmd_data[154]={8'h96};	
+assign cmd_data[155]={8'h97};	
+assign cmd_data[156]={8'h98};	
+assign cmd_data[157]={8'h99};	
+assign cmd_data[158]={8'h9A};	
+assign cmd_data[159]={8'h9B};	
+assign cmd_data[160]={8'h9C};	
+assign cmd_data[161]={8'h9D};	
+assign cmd_data[162]={8'h9E};	
+assign cmd_data[163]={8'h9F};	
+assign cmd_data[164]={8'hA0};	
+assign cmd_data[165]={8'hA1};	
+assign cmd_data[166]={8'hA2};	
+assign cmd_data[167]={8'hA3};	
+assign cmd_data[168]={8'hA4};	
+assign cmd_data[169]={8'hA5};	
+assign cmd_data[170]={8'hA6};	
+assign cmd_data[171]={8'hA7};	
+assign cmd_data[172]={8'hA8};	
+assign cmd_data[173]={8'hA9};	
+assign cmd_data[174]={8'hAA};	
+assign cmd_data[175]={8'hAB};	
+assign cmd_data[176]={8'hAC};	
+assign cmd_data[177]={8'hAD};	
+assign cmd_data[178]={8'hAE};	
+assign cmd_data[179]={8'hAF};	
+assign cmd_data[180]={8'hB0};	
+assign cmd_data[181]={8'hB1};	
+assign cmd_data[182]={8'hB2};	
+assign cmd_data[183]={8'hB3};	
+assign cmd_data[184]={8'hB4};	
+assign cmd_data[185]={8'hB5};	
+assign cmd_data[186]={8'hB6};	
+assign cmd_data[187]={8'hB7};	
+assign cmd_data[188]={8'hB8};	
+assign cmd_data[189]={8'hB9};	
+assign cmd_data[190]={8'hBA};	
+assign cmd_data[191]={8'hBB};	
+assign cmd_data[192]={8'hBC};	
+assign cmd_data[193]={8'hBD};	
+assign cmd_data[194]={8'hBE};	
+assign cmd_data[195]={8'hBF};	
+assign cmd_data[196]={8'hC0};	
+assign cmd_data[197]={8'hC1};	
+assign cmd_data[198]={8'hC2};	
+assign cmd_data[199]={8'hC3};	
+assign cmd_data[200]={8'hC4};	
+assign cmd_data[201]={8'hC5};	
+assign cmd_data[202]={8'hC6};	
+assign cmd_data[203]={8'hC7};	
+assign cmd_data[204]={8'hC8};	
+assign cmd_data[205]={8'hC9};	
+assign cmd_data[206]={8'hCA};	
+assign cmd_data[207]={8'hCB};	
+assign cmd_data[208]={8'hCC};	
+assign cmd_data[209]={8'hCD};	
+assign cmd_data[210]={8'hCE};	
+assign cmd_data[211]={8'hCF};	
+assign cmd_data[212]={8'hD0};	
+assign cmd_data[213]={8'hD1};	
+assign cmd_data[214]={8'hD2};	
+assign cmd_data[215]={8'hD3};	
+assign cmd_data[216]={8'hD4};	
+assign cmd_data[217]={8'hD5};	
+assign cmd_data[218]={8'hD6};	
+assign cmd_data[219]={8'hD7};	
+assign cmd_data[220]={8'hD8};	
+assign cmd_data[221]={8'hD9};	
+assign cmd_data[222]={8'hDA};	
+assign cmd_data[223]={8'hDB};	
+assign cmd_data[224]={8'hDC};	
+assign cmd_data[225]={8'hDD};	
+assign cmd_data[226]={8'hDE};	
+assign cmd_data[227]={8'hDF};	
+assign cmd_data[228]={8'hE0};	
+assign cmd_data[229]={8'hE1};	
+assign cmd_data[230]={8'hE2};	
+assign cmd_data[231]={8'hE3};	
+assign cmd_data[232]={8'hE4};	
+assign cmd_data[233]={8'hE5};	
+assign cmd_data[234]={8'hE6};	
+assign cmd_data[235]={8'hE7};	
+assign cmd_data[236]={8'hE8};	
+assign cmd_data[237]={8'hE9};	
+assign cmd_data[238]={8'hEA};	
+assign cmd_data[239]={8'hEB};	
+assign cmd_data[240]={8'hEC};	
+assign cmd_data[241]={8'hED};	
+assign cmd_data[242]={8'hEE};	
+assign cmd_data[243]={8'hEF};	
+assign cmd_data[244]={8'hF0};	
+assign cmd_data[245]={8'hF1};	
+assign cmd_data[246]={8'hF2};	
+assign cmd_data[247]={8'hF3};	
+assign cmd_data[248]={8'hF4};	
+assign cmd_data[249]={8'hF5};	
+assign cmd_data[250]={8'hF6};	
+assign cmd_data[251]={8'hF7};	
+assign cmd_data[252]={8'hF8};	
+assign cmd_data[253]={8'hF9};	
+assign cmd_data[254]={8'hFA};	
+assign cmd_data[255]={8'hFB};	
+assign cmd_data[256]={8'hFC};	
+assign cmd_data[257]={8'hFD};	
+assign cmd_data[258]={8'hFE};	
+assign cmd_data[259]={8'hFF};	
+			
+
+
+assign spi_wrdata = cmd_data[index];
+
+
+endmodule 
+
+
+
+
+
+
+
+
+
+
