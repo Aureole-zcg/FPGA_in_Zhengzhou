@@ -1085,6 +1085,7 @@ IIC时序控制
 
 单Bit读：  
 主机先发送开始位（SCL高电平时，SDA为下降沿），再发送7bit从机地址+1bit读写控制位（低电平写），从机1bit应答，主机再发送8bit内部寄存器地址，从机1bit应答，开始读之前，主机先第二次发送开始位，再发送7bit从机地址+1bit读写控制位（高电平读），从机1bit应答后，从机发送数据8bit，主机1bit应答（主机不应答，从机就不再发送数据，主机再发停止位（SCL高电平时，SDA为上升沿））
+<img width="1070" height="545" alt="image" src="https://github.com/user-attachments/assets/7311b971-ff6d-4e1a-8139-8b0cd2398800" />
 
 对于 I2C（IIC）总线，数据发送的位顺序是固定的：先发送最高位（MSB，Most Significant Bit），后发送最低位（LSB，Least Significant Bit）。
 
