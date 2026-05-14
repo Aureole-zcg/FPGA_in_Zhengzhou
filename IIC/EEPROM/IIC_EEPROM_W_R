@@ -1,0 +1,73 @@
+module IIC_EEPROM_W_R(
+
+	input wire sys_clk,
+	input wire sys_rst_n,
+	input wire write_key,
+	input wire read_key,
+	
+	output wire IIC_SCL,
+	inout IIC_SDA
+
+);
+	
+	wire iic_clk;
+	wire rst_n;
+	
+	wire wren;
+	wire rden;
+	wire i2c_start;
+	wire addr_num;
+	wire [15:0] byte_addr;
+	wire [7:0] wr_data;
+	wire i2c_wr_rd_done;
+	
+	clk_div clk_div(
+	
+		.sys_clk		(sys_clk	),		
+		.sys_rst_n		(sys_rst_n	),	
+		                            
+		.iic_clk		(iic_clk	),		
+    	.rst_n			(rst_n		)	
+    
+    );
+	
+	fsm fsm(
+	
+		.iic_clk		(iic_clk		),				
+		.rst_n			(rst_n			),
+		.write_key		(write_key		),			
+		.read_key		(read_key		),			
+		                               
+		.wren			(wren			),				
+		.rden			(rden			),				
+		.i2c_start		(i2c_start		),			
+		.addr_num		(addr_num		),			
+		.byte_addr		(byte_addr		),	
+		.wr_data		(wr_data		),		
+		                              
+		.i2c_wr_rd_done	(i2c_wr_rd_done	)		
+		
+	);
+	
+	i2c_ctrl i2c_ctrl
+	(
+		
+		.iic_clk			(iic_clk		),				//1MHz时钟
+		.rst_n				(rst_n			),				//复位信号，低电平有效
+		.wren				(wren			),				//写使能，为高代表写操作
+		.rden				(rden			),				//读使能，为高代表读操作
+		.i2c_start			(i2c_start		),				//开始标志信号
+		.addr_num			(addr_num		),				//EEPROM字地址长度，为0代表1个字节，为1代表2个字节
+		.byte_addr			(byte_addr		),				//EEPROM字地址
+		.wr_data			(wr_data		),				//写数据
+		                                    
+		.i2c_wr_rd_done		(i2c_wr_rd_done	),				//当前操作完成信号
+		.rd_data			(				),				//读出数据
+		                                    
+		.IIC_SCL			(IIC_SCL		),				//IIC时钟线
+		.IIC_SDA			(IIC_SDA		)				//IIC双向数据线
+		
+	);
+	
+	
+endmodule
