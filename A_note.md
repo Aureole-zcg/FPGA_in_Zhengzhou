@@ -1046,7 +1046,7 @@ Flash容量=页总数*每页字节数
 
 2026/5/11 IIC
 ---
-IIC（Inter-Integrated Circuit）集成电路总线，是一种简单、双向二线制同步串行总线  
+IIC（Inter-Integrated Circuit）集成电路总线，是一种简单、双向二线制同步串行总线，半双工工作模式  
 应用：  
 ADC数据采集  
 配置内部寄存器（摄像头、温度传感器  
