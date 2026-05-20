@@ -581,7 +581,7 @@ Latch其实就是锁存器，是一种在异步电路系统中，对输入信号
 2026/4/10 SCFIFO 
 ---
 存储类IP核：RAM,ROM,FIFO  
-FIFO (First Out First In) 先入先出，没有地址概念，具有一次性特性  
+FIFO (First Out First In) 先入先出缓冲器，没有地址概念，具有一次性特性  
 wrreq 写请求  
 data 数据  
 rdreq 读请求  
