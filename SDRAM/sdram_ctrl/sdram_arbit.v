@@ -1,3 +1,4 @@
+//仲裁模块
 module  sdram_arbit
 (
     input   wire            sys_clk     ,   //系统时钟
