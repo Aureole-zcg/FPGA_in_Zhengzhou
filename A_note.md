@@ -1160,7 +1160,8 @@ SELF REFRESH和AUTO REFRESH不同，如果 CKE 为高电平，刷新命令将处
 
 2023/5/26 OV5640
 ---
-类IIC协议：SCCB协议
+类IIC协议：SCCB协议  
+主要区别是SCCB协议的从机地址只有八位
 
 OV5640使用SDRAM来缓存，平滑速度差  
 VGA显示是连续匀速读，摄像头是突发式写，两者时钟、速率不同，必须帧缓存(Frame Buffer)来“平滑速度差”。  
