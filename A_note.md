@@ -194,7 +194,10 @@ always @(*)   *通配符
 parameter全局变量  
 实例化名要写在模块参数化和端口化中间  
 .sof是一种临时文件，断电丢失  
-.jic文件断电不丢失，在Quartus→File→Convert Programming File中生成  
+.jic文件断电不丢失，在Quartus→File→Convert Programming File中生成   
+.sof文件储存在sram  
+SRAM 是 静态随机存取存储器（Static Random-Access Memory）的缩写。  
+它是一种常见的易失性存储器，最主要的特性是只要通电，数据就能一直保持，无需像 DRAM（动态随机存取存储器）那样定期刷新。  
 
 ---
 对于只取多位宽信号的单独一位时，o2={vec[2]}==o2=vec[2]  
