@@ -1258,3 +1258,60 @@ Schematic Page Properties 修改页面参数
 14. 熟练使用串口调试助手，网络调试助手，Wireshark等工具进行分析;
 15. 通过CET-4，能够独立阅读英文数据手册，快速掌握新器件的使用方法;
 16. 了解数字电路设计、PCB基础，能看懂原理图，配合硬件工程师进行板级调试，熟练使用Cadence绘制原理图;
+
+2026/6/9 Xlinx
+---
+芯片分级介绍
+
+综合  
+布局布线  
+bit流文件
+
+xdc文件 约束  
+.veo IP核例化
+
+CMTS 时钟管理单元：（K7有1PLL + 1MMCM)  
+PLL锁相环 最多生成6个时钟  
+MMCM混合模式时钟管理器  最多生成7个时钟  相比于PLL用于配置复杂需求 可以实现更精细的相位调整
+
+BUFG 全局时钟缓冲器 原语 I O   
+   BUFG BUFG_inst (  
+      .O(O), // 1-bit output: Clock output  
+      .I(I)  // 1-bit input: Clock input  
+   );  
+通过BUFG把输出时钟输出到全局时钟树，保证
+
+原语和IP核的区别  
+原语是已存在的一部分的电路，数量是固定的，device里没有就不能用(IBUFGDS)，直接映射FPGA物理资源(LUT、BRAM、DSP、I/0)，从语言模版调用(消耗底层资源和硬件资源);  
+IP核如FIFO这种是消耗blockRAM资源，嵌入式存储资源  
+原语直接调用无配置界面，IP核多元化配置  
+>原语是底层资源（固定的电路），Device中有才可以使用  
+>IP核是原语封装的  
+
+Xilinx PLL IP核   
+PLL：搜索clock→FPGA Features and Design→Clocking→Clocking Wizard  
+FIFO: Memories & Storage Elements→FIFOs→FIFO Generator  
+
+XC7K160Tffg676 - 2 是赛灵思（Xilinx）FPGA（现场可编程门阵列）的完整型号，各部分含义如下：  
+1. XC  
+这是赛灵思公司FPGA产品的固定前缀，用于标识该产品由赛灵思公司制造。  
+2. 7  
+代表FPGA所属的系列，这里指的是赛灵思7系列FPGA。7系列基于28nm工艺打造，具有低功耗、高性能等特点，包含Artix、Kintex、Virtex等不同子系列，能满足从低成本到超高性能的广泛应用需求。  
+3. K  
+表明该FPGA属于Kintex子系列。Kintex系列定位于中高端应用，在逻辑资源、性能和成本之间取得了较好的平衡，适用于通信、视频处理、工业控制等领域。  
+4. 160  
+是一个用于衡量FPGA逻辑资源规模的相对指标。数字越大，意味着该FPGA内部包含的逻辑单元（如查找表LUT、触发器等）数量越多，可实现更复杂的逻辑功能。162240 Logic Cells  
+5. T  
+在型号命名中一般用来表示该FPGA具有特定的特性或适用场景，但具体含义可能因赛灵思的产品规划有所不同，通常可能和产品的一些电气特性、功能定位相关。代表能调用高速收发器资源（GTX）  
+6. ffg  
+代表封装类型，“ffg” 表示细间距球栅阵列（Fine - Pitch Ball Grid Array）封装。这种封装具有较多的引脚数量，引脚间距较小，可以提供更高的集成度和更好的电气性能，适合需要大量I/O接口和较高性能的应用。  
+7. 676  
+指的是该封装的引脚数量，即这款采用 “ffg” 封装的FPGA有676个引脚，引脚数量决定了芯片与外部电路连接的能力和复杂度。400个可用引脚  
+8. -2  
+代表速度等级。速度等级反映了FPGA内部逻辑电路的运行速度，数字越大表示芯片的运行速度越快、性能越高，但通常功耗也会相对较大。“ - 2” 是具体的速度等级标识。  
+
+.bit固化→.bin/.mcs/.hex  
+Tools→Generate Memory Configuration File   
+Setting→  
+
+ILA .ltx文件  
