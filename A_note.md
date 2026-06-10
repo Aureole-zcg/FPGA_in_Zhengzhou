@@ -1273,6 +1273,8 @@ xdc文件 约束
 CMTS 时钟管理单元：（K7有1PLL + 1MMCM)  
 PLL锁相环 最多生成6个时钟  
 MMCM混合模式时钟管理器  最多生成7个时钟  相比于PLL用于配置复杂需求 可以实现更精细的相位调整
+<img width="937" height="665" alt="image" src="https://github.com/user-attachments/assets/26a10ec2-e33c-4415-875b-506617540145" />
+
 
 BUFG 全局时钟缓冲器 原语 I O   
    BUFG BUFG_inst (  
