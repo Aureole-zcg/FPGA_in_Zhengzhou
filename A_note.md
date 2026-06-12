@@ -1260,6 +1260,8 @@ Schematic Page Properties 修改页面参数
 15. 通过CET-4，能够独立阅读英文数据手册，快速掌握新器件的使用方法;
 16. 了解数字电路设计、PCB基础，能看懂原理图，配合硬件工程师进行板级调试，熟练使用Cadence绘制原理图;
 
+熟练掌握Xilinx底层资源，器件选型  
+
 2026/6/9 Xlinx
 ---
 芯片分级介绍
@@ -1318,3 +1320,47 @@ Tools→Generate Memory Configuration File
 Setting→  
 
 ILA .ltx文件  
+
+2026/6/11 Xilinx FIFO
+---
+fifo满了不写，空了不读  
+data_count用量  
+FIFO在Xilinx中异步复位为高电平有效，有保护电路时（有读时钟和写时钟(Independent Clocks Block RAM)）复位为8+60个周期，无保护电路为3+30个周期  
+默认一个潜伏期，FWFT固定0个，加D触发器可到2个或者3个  
+prog_full/empty工程满/空阈值常数（IP核设置界面第三个状态标志里）  
+usedw用量变成count，分别与读写时钟同步，代码判断读count是否大于一半即可  
+首字先出：First Word Fall Through  
+将来工程命名：IBS_WRFIFO_32IN_64OUT_2048(独立时钟/两个时钟i BRAM 标准模式s首字先出f)  
+Vivado输入输出位宽相差不超过八倍，可以选择不使用复位  
+
+命名：First Word Fall Through  
+将来工程命名：IBS_WRFIFO_32IN_64OUT_2048(独立i BRAM 标准模式s)  
+总结以上，用于面试：  
+（问你用过FIFO没，你回答：用过）  
+要这样回答：FIFO天天项目使用，很熟练  
+1、名字 2、通常调IP核来实现的 3、接口类型 分别是啥 控制多少潜伏期  4、读写位宽和地址比例，位宽最多不超8倍(如 不能8进512出) 5、复位时序 需要一定时长PG057手册有时序：复位一段时间+再等一段时间 才能正常读写操作 6、状态指示信号 可编程的空或满 7、读写用量在Quartus和vivado里分别叫啥 与读写时钟同步 8、summary 资源消耗和潜伏期，最高36k的BRAMs  9、作用有三个，缓存，转换位宽，跨时钟域, 10设计规范 无论Quartus还是vivado 空了不读 满了不写 命名规则规范 11.Xilinx的FIFO有总使能，总使能优先于写使能（Altera是写请求）
+
+RAM   
+写使能拉高时，在不同模式下，写优先DO会先将DI输出，读优先DO输出地址的旧数据，无改变模式则不会在读时DO输出新数据
+
+
+
+2026/6/12 Xilinx底层资源  
+---
+10个时钟域  
+_P _N是差分信号线  
+一个bank50个I/O   
+每个时钟区域从 HROW 向上和向下跨越 25 个 CLB，并水平跨越设备的每一侧。  
+所有时钟经过BUFG  
+一个时钟区域每列始终包含 50 个 CLB，每列包含十个 36K 块 RAM（除非五个 36K 块被 PCI Express®的集成块替换），每列包含 20 个 DSP 切片，以及 12 个 BUFH。一个时钟区域如果适用，则包含一个 CMT（PLL/MMCM），一个 50 个 I/O 的组，一个由四个串行收发器组成的 GT 四重组，以及在一个块 RAM 列中为 PCIe®的一半列。
+
+下述全段背诵，面试问到直接回答，分别使用算法、存储、逻辑、时钟、I/0、布线等消耗那些底层资源  
+1. 一片clockregion(时钟域)最小1个最大24个，不同芯片数量不一  
+2. 1片里面的每一列50个CLB(可配置逻辑块)，一个clb包含了2个slices，中间有HROW(水平时钟行，上下各25个clb）  
+3. BUFG(clobal buffer全局时钟缓冲器)共32个，一样HROW上下各16个，在language templates语言模版中搜索原语，输入时钟源，输出时改变布局布线，保障比如触发器、rom等元器件的时钟延时和抖动最小  
+4. 一个时钟域每列有10个36k block RAMs，特殊情况被PCIE硬IP核给顶替掉5个36k bRAM，1个36k包含2个18kb的BRAM  
+5. GT quad 包含4个串行高速收发器  
+6. 一个bank有50个I/0引脚(24对差分p/n段,2个单端)  
+7. DSP 20个  
+8. 布线资源看device的切换布局
+
