@@ -1357,10 +1357,20 @@ _P _N是差分信号线
 下述全段背诵，面试问到直接回答，分别使用算法、存储、逻辑、时钟、I/0、布线等消耗那些底层资源  
 1. 一片clockregion(时钟域)最小1个最大24个，不同芯片数量不一  
 2. 1片里面的每一列50个CLB(可配置逻辑块)，一个clb包含了2个slices，中间有HROW(水平时钟行，上下各25个clb）  
-3. BUFG(clobal buffer全局时钟缓冲器)共32个，一样HROW上下各16个，在language templates语言模版中搜索原语，输入时钟源，输出时改变布局布线，保障比如触发器、rom等元器件的时钟延时和抖动最小  
+3. BUFG(clobal buffer全局时钟缓冲器)共32个，一个HROW上下各16个，在language templates语言模版中搜索原语，输入时钟源，输出时改变布局布线，保障比如触发器、rom等元器件的时钟延时和抖动最小  
 4. 一个时钟域每列有10个36k block RAMs，特殊情况被PCIE硬IP核给顶替掉5个36k bRAM，1个36k包含2个18kb的BRAM  
 5. GT quad 包含4个串行高速收发器  
 6. 一个bank有50个I/0引脚(24对差分p/n段,2个单端)  
-7. DSP 20个  
+7. DSP 20个，HROW上下各10个  
 8. 布线资源看device的切换布局
+
+>slices 切片  
+>一个Slice由4个6输入查找表（LUT6）、8个触发器（Flip-Flop）、多路复用器和进位链等资源组成，Slice有SLICEL (Logic Slice)基本逻辑片和SLICEM (Memory Slice)扩展存储片  
+>
+>BUFG的布局是：  
+>物理上：被水平中心线分为上下两组，各16个。  
+>逻辑上：BUFG不属于任何时钟区域，是全局资源。  
+>功能上：BUFG的信号通过Clock Backbone到达各时钟区域，再经由HROW进入区域内部
+
+
 
