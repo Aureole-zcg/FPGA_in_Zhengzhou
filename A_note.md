@@ -540,7 +540,6 @@ RAM_IP核单端口可选读使能，读写共用一个地址，一个时钟
 单端口RAM会写入后自动读出来
 
 ROMIP核需要提前准备.mif文件  
->“Memory Initialization File”（内存初始化文件）  
 .mif文件可以用Quartus或第三方软件(matlab)生成，也可以之间文本编辑  
 添加文件时./quartus.mif要求项目工程必须和.mif文件在同一文件夹下才可使用简写路径  
 第三方（matlab）采样的方式  
@@ -552,8 +551,8 @@ Y=Asin(ωt+φ)+B
 初相位φ  
 直流分量B   
 数字芯片在采样时，负数会直接清零  
-采样点数也是存储空间的深度  
-
+采样点数也是存储空间的深度   
+>“Memory Initialization File”（内存初始化文件）  
 
 2026/4/9 Latch
 ---
