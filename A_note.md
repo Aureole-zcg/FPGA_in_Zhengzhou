@@ -1419,7 +1419,7 @@ init_calib_complete 初始化校验完成信号
 DDR3L 1.35V 低电压版本
 
 XADC主要用于监测电压和温度  
-XADC必须要有，且只能有一个，在设置mig时不选择开启XDC就需要手动配置XDCIP核
+XADC必须要有，且只能有一个，在设置mig时不选择开启XADC就需要手动配置XADCIP核
 
 IO标准  
 SSTL15（单端信号）  
