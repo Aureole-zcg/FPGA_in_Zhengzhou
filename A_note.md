@@ -1439,5 +1439,29 @@ DDR3-1600:12.8GB/S
 
 整个DRR3是2GB，单个颗粒512MB，等于4Gb，数据位宽16，所以是256Meg x 16(256Mb x 16bit)
 
+2026/6/17 XADC
+---
+Xilinx Analog-to-Digital Converter  
+使用JTAG直接调用或者IP核调用，测量芯片的电压和温度  
+使用IP核时，选择使用DRP接口，实现动态重配置
+
+Zynq分为PS和PL端  
+processing system  
+programmable logic  
+XADC是双通道12bit位宽1M采样频率的片上模数转换传感器  
+1MSPS指每秒1M采样
+
+17对外部模拟输入接口，差分信号VP_0,VN_0,VAUXP_0 ~ 15,VAUXN_0 ~ 15  
+高十二位是数据
+
+D触发器是具有记忆性的具有两个稳定状态的信息存储元器件  
+
+
+温度传感器结果可以在状态寄存器 00h 中找到  
+VCCINT 初始电压 存储在状态寄存器 01h  
+VCCAUX 辅助电压 存储在状态寄存器 02h  
+
+从XADC读取的温度数据是一个16位的二进制数，但只有其中的高12位（bit 15 到 bit 4）代表了有效的温度信息。  
+do_out[15-:12] 这种写法就是从第15位开始，向下数（递减方向）共12位。
 
 
