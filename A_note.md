@@ -1136,6 +1136,11 @@ IIC时序控制
 EEPROM的地址由页数和字节决定  
 地址页写满不会进行到下一页，一次页写操作只会在这一页进行
 
+EEPROM 电可擦除ROM 一次擦除一个字节  
+EPROM 可擦除编程ROM 紫外线光擦除  
+FLASH 按块擦除
+
+
 2026/5/20 Clock stretching
 ---
 Clock stretching（时钟拉伸）是 I2C 通信协议中一种用于流量控制的机制。   
