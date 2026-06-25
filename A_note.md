@@ -1485,4 +1485,5 @@ do_out[15-:12] 这种写法就是从第15位开始，向下数（递减方向）
 5. 位宽代码变小  
 6. 少用乘法器，多用移位最好截位  
 以上操作如果不够用，先转移到资源更多的板卡比如K7转V7，优化完，再转回来K7  
+<img width="560" height="824" alt="9adf7d9dffbe1765594a6b4c45a2a9eb" src="https://github.com/user-attachments/assets/25ccff87-429d-46a0-9147-a5cc61e5a0ce" />
 
