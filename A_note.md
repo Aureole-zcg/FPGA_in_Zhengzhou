@@ -1303,6 +1303,10 @@ BUFG 全局时钟缓冲器 原语 I O
       .I(I)  // 1-bit input: Clock input  
    );  
 通过BUFG将时钟信号接入FPGA全局时钟树，能够大幅减小全局时钟偏斜、提升时钟驱动能力、降低时钟抖动与传输延迟，保证芯片内所有时序逻辑单元获得相位均匀、质量稳定的同步时钟，保障高速设计时序收敛与系统稳定运行。
+MRCC 多区域时钟管脚  
+SRCC 单区域时钟管脚  
+MRCC用完了可使用SRCC  
+晶振经过MRCC再经过BUFG，时钟质量会更好  
 
 原语和IP核的区别  
 原语是已存在的一部分的电路，数量是固定的，device里没有就不能用(IBUFGDS)，直接映射FPGA物理资源(LUT、BRAM、DSP、I/O)，从语言模版调用(消耗底层资源和硬件资源);  
@@ -1495,8 +1499,8 @@ do_out[15-:12] 这种写法就是从第15位开始，向下数（递减方向）
 2026/6/25
 ---
 CLB (Configurable Logic Block) 可配置逻辑块  
-SLICEL  查找表：A1~6地址  
-SLICEM 查找表：WA1~8 写地址拓展 DI1~2 数据 A1~6读地址 CLK 时钟 WE写使能  
+SLICEL  查找表：A1 ~ 6地址  
+SLICEM 查找表：WA1 ~ 8 写地址拓展 DI1 ~ 2 数据 A1~6读地址 CLK 时钟 WE写使能  
 SLICEL : SLICEM ≈ 2 : 1  
 
 7 系列可配置逻辑块（CLB）提供高级、高性能 FPGA 逻辑：  
@@ -1504,7 +1508,8 @@ SLICEL : SLICEM ≈ 2 : 1
 - 双 LUT5（5 输入 LUT）选项  
 - 分布式内存 (DRAM) 和移位寄存器逻辑功能  
 - 专用高速进位逻辑用于算术函数  
-- 宽多路复用器用于高效利用  
+- 宽多路复用器用于高效利用
+  
 一个 CLB 元素包含一对切片，CLBLL(SLICEL)+CLBLM(SLICEM)  
 代码assign always 布局布线后消耗CLB资源，IP核消耗BRAM资源  
 
