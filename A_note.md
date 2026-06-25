@@ -1492,3 +1492,38 @@ do_out[15-:12] 这种写法就是从第15位开始，向下数（递减方向）
 以上操作如果不够用，先转移到资源更多的板卡比如K7转V7，优化完，再转回来K7  
 <img width="560" height="824" alt="9adf7d9dffbe1765594a6b4c45a2a9eb" src="https://github.com/user-attachments/assets/25ccff87-429d-46a0-9147-a5cc61e5a0ce" />
 
+2026/6/25
+---
+CLB (Configurable Logic Block) 可配置逻辑块  
+SLICEL  查找表：A1~6地址  
+SLICEM 查找表：WA1~8 写地址拓展 DI1~2 数据 A1~6读地址 CLK 时钟 WE写使能  
+SLICEL : SLICEM ≈ 2 : 1  
+
+7 系列可配置逻辑块（CLB）提供高级、高性能 FPGA 逻辑：  
+- 真实的 6 输入查找表（LUT）技术   
+- 双 LUT5（5 输入 LUT）选项  
+- 分布式内存 (DRAM) 和移位寄存器逻辑功能  
+- 专用高速进位逻辑用于算术函数  
+- 宽多路复用器用于高效利用  
+一个 CLB 元素包含一对切片，CLBLL(SLICEL)+CLBLM(SLICEM)  
+代码assign always 布局布线后消耗CLB资源，IP核消耗BRAM资源  
+
+DFF  
+SR 高级置位信号（置1）  
+CE 置0  
+
+一个四输入查找表就代表一个逻辑单元  
+MUX2_1 2选1选择器  
+进位逻辑链  
+一个SLICE有4查找表 3选择器 1进位逻辑链 8D触发器  
+逻辑单元数量与六输入 LUT 的比例为 1.6:1   
+SLICEM可创建分布式RAM和移位寄存器  
+只有 SLICEMs 才能将其 LUT 用作分布式 RAM 或 SRLs  
+> 大约三分之二的切片是 SLICEL 逻辑切片，其余的是 SLICEM，它们也可以将其 LUT 用作分布式 64 位 RAM 或用作 32 位移位寄存器（SRL32）或用作两个 SRL16  
+> 物理实现：对LUT内部SRAM单元的重新利用  
+> SLICEM之所以特殊，在于其LUT的内部结构除了支持常规逻辑外，其存储单元（SRAM cell）可以被配置为不同的功能模式。  
+> 作为分布式RAM：将LUT内部的64或32个存储单元（SRAM）直接用作一个小的随机存取存储器。写入是同步的，读取是异步的。  
+> 作为移位寄存器 (Shift Register)：将LUT内部的32个存储单元串联成一个32位长的移位寄存器链。  
+	
+
+
