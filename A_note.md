@@ -1533,5 +1533,40 @@ SLICEM可创建分布式RAM和移位寄存器
 > 作为分布式RAM：将LUT内部的64或32个存储单元（SRAM）直接用作一个小的随机存取存储器。写入是同步的，读取是异步的。  
 > 作为移位寄存器 (Shift Register)：将LUT内部的32个存储单元串联成一个32位长的移位寄存器链。  
 	
+2026/6/26 UG476 GT Transceivers
+---
+GTX 最高速度12.5Gb/s  
+GTH 最高速度 13.1Gb/s  
+GTZ 最高速度 28.05Gb/s  
+GTP 最高速度 6.6Gb/s  
 
+制作工艺  
+A7系列有GTP Transceivers收发器（双绞线视频传输，G是Gigabyte） 最大6.6Gbit/s；  
+K7有GTX收发器（光纤），最大12.5Gb/s；  
+V7上面则是GTX/GTH/GTZ都有使用，不同型号V7支持的高速收发器类型不一样，而GTH(同轴电缆)，最大13.1Gb/s，而且只有在高端的芯片上才使用了GTZ，最大28.05Gb/s  
+高端的Virtex UltraScale +（超规模）中使用了GTM  
+传输速率：GTP < GPX < GTH < GTZ < GTY < GTM  
+
+8B/10B encoding and decoding  
+8B转10B 编码和解码  
+
+<img width="554" height="570" alt="image" src="https://github.com/user-attachments/assets/f91fcbbd-45e5-48d4-878e-b8398bbc76de" />  
+> 四个 GTXE2 通道与一个 GTXE2_COMMON 原语组合在一起称为一个 Quad 或 Q。GTXE2_COMMON 原语包含一个 LC-tank PLL（QPLL）。
+> 每个 GTXE2_CHANNEL 原语由一个通道 PLL、一个发射器和接收器组成。
+
+IBUFDS 可实现差分转单端  
+GTX CHANNEL的TX RX是差分信号线  
+QPLL提供最高的时钟信号12.5GHz，CPLL相对低  
+GTX 收发器中的 CPLL 具有 1.6 GHz 至 3.3 GHz 的标称工作范围。GTH 收发器中的 CPLL 具有 1.6 GHz 至5.16 GHz 的标称工作范围。7 系列 FPGAs 收发器向导根据应用需求选择合适的 CPLL 设置。  
+吞吐量计算  
+并行传输：时钟频率 x 数据位宽  
+串行传输：通道数量 x 通道速率  
+/M 前置分频器  
+/N1 第一级反馈分频 /N2 第二级反馈分频 根据输出时钟和参考时钟做对比  
+<img width="526" height="217" alt="image" src="https://github.com/user-attachments/assets/1e57a32f-b138-4337-b336-ccdb59dd0298" />
+
+<img width="528" height="70" alt="image" src="https://github.com/user-attachments/assets/75123caf-2cc8-4b23-a263-697e39deb24d" />
+
+
+板卡间进行光纤传输的顺序：电→光→光→电
 
