@@ -1307,6 +1307,8 @@ MRCC 多区域时钟管脚
 SRCC 单区域时钟管脚  
 MRCC用完了可使用SRCC  
 晶振经过MRCC再经过BUFG，时钟质量会更好  
+<img width="676" height="755" alt="image" src="https://github.com/user-attachments/assets/b59d64e0-487d-4bf3-b748-85cc8c510c85" />
+
 
 原语和IP核的区别  
 原语是已存在的一部分的电路，数量是固定的，device里没有就不能用(IBUFGDS)，直接映射FPGA物理资源(LUT、BRAM、DSP、I/O)，从语言模版调用(消耗底层资源和硬件资源);  
