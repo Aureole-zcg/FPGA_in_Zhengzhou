@@ -1540,7 +1540,7 @@ GTH 最高速度 13.1Gb/s
 GTZ 最高速度 28.05Gb/s  
 GTP 最高速度 6.6Gb/s  
 
-制作工艺  
+物理实现  
 A7系列有GTP Transceivers收发器（双绞线视频传输，G是Gigabyte） 最大6.6Gbit/s；  
 K7有GTX收发器（光纤），最大12.5Gb/s；  
 V7上面则是GTX/GTH/GTZ都有使用，不同型号V7支持的高速收发器类型不一样，而GTH(同轴电缆)，最大13.1Gb/s，而且只有在高端的芯片上才使用了GTZ，最大28.05Gb/s  
