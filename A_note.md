@@ -1608,7 +1608,7 @@ DCI 直流终端电阻
 IBUFDS (差分输入缓冲器) 对应数据使用
 
 IBUFGDS（差分时钟输入缓冲器）  
-差分原语的使用和规则与单端 SelectIO 原语相似。差分 SelectIO 原语有两个引脚，分别连接到设备引脚，以显示差分对中的 P 和 N 通道引脚。N 通道引脚带有 B 后缀。IBUFGDS（差分时钟输入缓冲器）device底层不能调用，使用IBUFDS原语代替
+差分原语的使用和规则与单端 SelectIO 原语相似。差分 SelectIO 原语有两个引脚，分别连接到设备引脚，以显示差分对中的 P 和 N 通道引脚。N 通道引脚带有 B 后缀。IBUFGDS（差分时钟输入缓冲器）device底层不能调用，使用IBUFDS原语代替  
 <img width="535" height="168" alt="image" src="https://github.com/user-attachments/assets/775c6d65-d416-4218-bdaf-10cbd8fe0449" />
 
 IBUFDS将差分转为单端信号后双沿采样，IDDR原语是单沿采样  
