@@ -1279,7 +1279,9 @@ Schematic Page Properties 修改页面参数
 
 2026/6/9 Xlinx Vivado
 ---
-ISE是Vivado的前一代设计套件
+ISE是Vivado的前一代设计套件  
+>ISE的全称为Integrated Software Environment，即“集成软件环境”，是Xilinx公司的硬件设计工具。
+
 芯片分级介绍
 
 综合  
