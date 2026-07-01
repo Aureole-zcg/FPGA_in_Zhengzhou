@@ -1577,3 +1577,65 @@ GTX 收发器中的 CPLL 具有 1.6 GHz 至 3.3 GHz 的标称工作范围。GTH 
 2026/6/29 软件无线电
 ---
 <img width="649" height="166" alt="image" src="https://github.com/user-attachments/assets/4f0bdcec-ae2f-4c98-b4f5-3bcb1e659241" />
+
+
+2026/7/1 UG471 SelectIO Resources
+---
+7 系列 FPGA 提供高性能（HP）和高范围（HR）I/O 组。HP I/O 组设计用于满足高速内存和其他芯片间接口的性能要求，电压高达 1.8V。HR I/O 组设计用于支持更广泛的 I/O 标准，电压高达 3.3V。    
+> high-performance (HP）高性能  
+> high-range (HR) 高范围
+
+SelectIO 引脚可以配置为各种 I/O 标准，包括单端和差分标准。  
+单端 I/O 标准（例如，LVCMOS、LVTTL、HSTL、PCI 和 SSTL）  
+差分 I/O 标准（例如 LVDS、Mini_LVDS、RSDS、PPDS、BLVDS 以及差分 HSTL 和 SSTL）
+
+VCCO 主控电压 所有引脚标准都由VCCO决定  
+VREF 参考电压  
+VCCAUX 辅助电压  
+> VCCAUX_IO 不同IO的辅助电压  
+> VDDR3 板卡设计的DDR3单独的电压
+
+DCI 直流终端电阻  
+使用 DCI I/O 标准的 7 系列 FPGA HP I/O 组可以选用从另一个 HP I/O 组导出 DCI 阻抗值。如图 1-6 所示，一个数字控制总线在组内内部分布，以控制每个 I/O 的阻抗。
+<img width="516" height="183" alt="image" src="https://github.com/user-attachments/assets/e691d232-4405-4b62-bbab-8265e7c1f4b5" />
+
+
+如果有100~10KΩ的电阻连接在IO上，IBUFDS 原语代码DCI选项(DIFF_TERM)上是FALSE  
+如果FPGA内部有DCI，原语DCI选项上是TURE  
+> DCI (Dynamic Controlled Impedance，动态可控阻抗)技术允许FPGA内部I/O驱动器自动调整阻抗，以匹配外部参考电阻，从而减少信号反射和振铃问题。在高速信号传输中，正确的阻抗匹配对信号质量至关重要。
+> DCI电阻用于XilinxFPGA中实现I/O阻抗匹配，通过外部参考电阻控制输出驱动器阻抗或分离端接阻抗，提高高速信号完整性。
+
+IBUFDS (差分输入缓冲器) 对应数据使用
+
+IBUFGDS（差分时钟输入缓冲器）  
+差分原语的使用和规则与单端 SelectIO 原语相似。差分 SelectIO 原语有两个引脚，分别连接到设备引脚，以显示差分对中的 P 和 N 通道引脚。N 通道引脚带有 B 后缀。IBUFGDS（差分时钟输入缓冲器）device底层不能调用，使用IBUFDS原语代替
+<img width="535" height="168" alt="image" src="https://github.com/user-attachments/assets/775c6d65-d416-4218-bdaf-10cbd8fe0449" />
+
+IBUFDS将差分转为单端信号后双沿采样，IDDR原语是单沿采样  
+7 系列设备在 ILOGIC 块中有专用的寄存器来实现输入双数据速率（DDR）寄存器。此功能通过实例化 IDDR 原语来使用。  
+IDDR 原语支持以下操作模式：  
+1. OPPOSITE_EDGE mode 反沿  
+2. SAME_EDGE mode 同沿  
+3. SAME_EDGE_PIPELINED mode 同沿流水  
+
+OPPOSITE_EDGE mode  
+一种传统的输入 DDR 解决方案，或 OPPOSITE_EDGE 模式，是通过 ILOGIC 块中的一个输入来实现的。数据在时钟上升沿通过输出 Q1 呈现给 FPGA 逻辑，并在时钟下降沿通过输出 Q2 呈现。这种结构类似于 Virtex-6 FPGA 的实现。图 2-5 显示了使用 OPPOSITE_EDGE 模式输入 DDR 的时序图。  
+<img width="634" height="243" alt="image" src="https://github.com/user-attachments/assets/63ced13f-8abd-40cb-bb40-3371d16e775a" />
+
+>  C是通过IBUFDS输出的单端信号，上下沿采样，IDDR将上下沿解成单沿采样  
+> D0A在D0A下降沿从Q1输出，D0A和D1A的输出只差半个周期
+
+SAME_EDGE mode   
+在 SAME_EDGE 模式下，数据在同一时钟边沿被呈递到 FPGA 逻辑中。这种结构类似于 Virtex-6 FPGA 的实现。  
+图 2-6 显示了使用 SAME_EDGE 模式输入 DDR 的时序图。在时序图中，输出对 Q1 和 Q2 不再是 (0) 和 (1)。相反，首先呈递的是对 Q1 (0) 和 Q2 (无关)，然后在下一个时钟周期呈递对 (1) 和 (2)。  
+<img width="637" height="234" alt="image" src="https://github.com/user-attachments/assets/39cf4f8d-45ed-4ff4-be3f-191795df79c6" />
+
+> 在奇数序号数据的上升沿输出
+
+SAME_EDGE_PIPELINED mode  
+在 SAME_EDGE_PIPELINED 模式下，数据在同一时钟边沿被呈现到 FPGA 逻辑上。  
+与 SAME_EDGE 模式不同，数据对不会被一个时钟周期分开。然而，需要额外的时钟延迟来消除 SAME_EDGE 模式分开的效果。图 2-7 显示了使用 SAME_EDGE_PIPELINED 模式输入 DDR 的时序图。输出对 Q1 和 Q2 同时被呈现到 FPGA 逻辑上。  
+<img width="628" height="263" alt="image" src="https://github.com/user-attachments/assets/532a4883-df08-496e-8798-28b768f84ea9" />
+
+> 同时进行输出
+
