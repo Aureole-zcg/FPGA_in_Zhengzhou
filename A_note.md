@@ -1650,7 +1650,10 @@ FIXED 固定模式 该模式下不能跳档 且该模式下可以不使用时钟
 VARIABLE 可变 可变模式只能加减档  
 VAR_LOAD, 可变加载 可变加载模式可以跳档  
 VAR_LOAD_PIPE 可变加载流水  
-<img width="1510" height="505" alt="image" src="https://github.com/user-attachments/assets/188cef55-599f-4fb1-92eb-22b7c11109b0" />
+<img width="711" height="382" alt="image" src="https://github.com/user-attachments/assets/edd0ecc5-ee57-4fc6-918d-d95dccc30ed6" />
+
+<img width="714" height="377" alt="image" src="https://github.com/user-attachments/assets/4d3b116d-d0b9-4b5d-a092-949d675935af" />
+
 
 <img width="386" height="204" alt="image" src="https://github.com/user-attachments/assets/fd99bf6b-7591-425b-b21e-1162d0014db8" />  
 
