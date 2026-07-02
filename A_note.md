@@ -1639,7 +1639,7 @@ SAME_EDGE_PIPELINED mode
 
 > 同时进行输出
 
-2026/7/2
+2026/7/2 IDELAY
 ---
 IDELAY有32个挡位(tap)，默认使用时钟频率200MHz  
 IDELAY在使用时常夹在IBUFDS和IDDR之间  
@@ -1653,7 +1653,6 @@ VAR_LOAD_PIPE 可变加载流水
 <img width="711" height="382" alt="image" src="https://github.com/user-attachments/assets/edd0ecc5-ee57-4fc6-918d-d95dccc30ed6" />
 
 <img width="714" height="377" alt="image" src="https://github.com/user-attachments/assets/4d3b116d-d0b9-4b5d-a092-949d675935af" />
-
 
 <img width="386" height="204" alt="image" src="https://github.com/user-attachments/assets/fd99bf6b-7591-425b-b21e-1162d0014db8" />  
 
