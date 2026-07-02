@@ -1639,3 +1639,31 @@ SAME_EDGE_PIPELINED mode
 
 > 同时进行输出
 
+2026/7/2
+---
+IDELAY有32个挡位(tap)，默认使用时钟频率200MHz  
+IDELAY在使用时常夹在IBUFDS和IDDR之间  
+第一档600ps 每档增加78.125ps  
+
+IDELAY_TYPE  
+FIXED 固定模式 该模式下不能跳档 且该模式下可以不使用时钟  
+VARIABLE 可变 可变模式只能加减档  
+VAR_LOAD, 可变加载 可变加载模式可以跳档  
+VAR_LOAD_PIPE 可变加载流水  
+<img width="1510" height="505" alt="image" src="https://github.com/user-attachments/assets/188cef55-599f-4fb1-92eb-22b7c11109b0" />
+
+<img width="386" height="204" alt="image" src="https://github.com/user-attachments/assets/fd99bf6b-7591-425b-b21e-1162d0014db8" />
+> IDELAY_VALUE  =0 ~ 31
+
+<img width="532" height="202" alt="image" src="https://github.com/user-attachments/assets/15e08d9c-320c-4c84-ae73-59ffe4c63cb5" />
+
+<img width="513" height="245" alt="image" src="https://github.com/user-attachments/assets/df7ef494-2426-45f2-ad94-773b4088ac87" />
+
+REFCLK_FREQUENCY 参考时钟频率  
+默认时钟200MHz, 实际值：190 至 210，290 至 310，或 390 至 410  
+>设置时序分析器用于静态时序分析所使用的抽头值（单位：MHz）。290.0 至 310.0 和 390 至 410 的范围并非所有速度等级都可用。  
+参考时钟200MHz时钟，每一档（tap）延迟=T/2 /32 * 1000 = 78.125ps（0档延时600ps，1档延时678ps，2档延时756ps）（每个档位对应的延迟是某个基本单位的一半，所以先除以2）
+>某个基本单位指ADC采样使用的是差分时钟或双沿采样，采样数据的单位时间是时钟周期T的一半  
+>T=1/f
+
+如果实例化了 IDelayE2 或 ODelayE2 原语，则必须实例化 IDelayCtrl 模块。IDelayCtrl 模块在其区域内持续校准各个延迟抽头（IDELAY/ODELAY），以减少工艺、电压和温度变化的影响。IDelayCtrl 模块使用用户提供的 REFCLK 校准 IDELAY 和 ODELAY。
