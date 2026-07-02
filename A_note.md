@@ -1650,17 +1650,17 @@ FIXED 固定模式 该模式下不能跳档 且该模式下可以不使用时钟
 VARIABLE 可变 可变模式只能加减档  
 VAR_LOAD, 可变加载 可变加载模式可以跳档  
 VAR_LOAD_PIPE 可变加载流水  
-<img width="711" height="382" alt="image" src="https://github.com/user-attachments/assets/edd0ecc5-ee57-4fc6-918d-d95dccc30ed6" />
+<img width="711" height="382" alt="image" src="https://github.com/user-attachments/assets/edd0ecc5-ee57-4fc6-918d-d95dccc30ed6" />  
 
-<img width="714" height="377" alt="image" src="https://github.com/user-attachments/assets/4d3b116d-d0b9-4b5d-a092-949d675935af" />
+<img width="714" height="377" alt="image" src="https://github.com/user-attachments/assets/4d3b116d-d0b9-4b5d-a092-949d675935af" />  
 
 <img width="386" height="204" alt="image" src="https://github.com/user-attachments/assets/fd99bf6b-7591-425b-b21e-1162d0014db8" />  
 
 > IDELAY_VALUE  =0 ~ 31
 
-<img width="532" height="202" alt="image" src="https://github.com/user-attachments/assets/15e08d9c-320c-4c84-ae73-59ffe4c63cb5" />
+<img width="532" height="202" alt="image" src="https://github.com/user-attachments/assets/15e08d9c-320c-4c84-ae73-59ffe4c63cb5" />  
 
-<img width="513" height="245" alt="image" src="https://github.com/user-attachments/assets/df7ef494-2426-45f2-ad94-773b4088ac87" />
+<img width="513" height="245" alt="image" src="https://github.com/user-attachments/assets/df7ef494-2426-45f2-ad94-773b4088ac87" />  
 
 REFCLK_FREQUENCY 参考时钟频率  
 默认时钟200MHz, 实际值：190 至 210，290 至 310，或 390 至 410  
