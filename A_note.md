@@ -1608,6 +1608,7 @@ VCCAUX 辅助电压
 
 DCI 直流终端电阻  
 使用 DCI I/O 标准的 7 系列 FPGA HP I/O 组可以选用从另一个 HP I/O 组导出 DCI 阻抗值。如图 1-6 所示，一个数字控制总线在组内内部分布，以控制每个 I/O 的阻抗。
+
 <img width="516" height="183" alt="image" src="https://github.com/user-attachments/assets/e691d232-4405-4b62-bbab-8265e7c1f4b5" />
 
 
