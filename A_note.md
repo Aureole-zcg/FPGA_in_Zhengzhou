@@ -1584,6 +1584,11 @@ GTX 收发器中的 CPLL 具有 1.6 GHz 至 3.3 GHz 的标称工作范围。GTH 
 ---
 <img width="649" height="166" alt="image" src="https://github.com/user-attachments/assets/4f0bdcec-ae2f-4c98-b4f5-3bcb1e659241" />
 
+2026/6/29 
+---
+<img width="1168" height="753" alt="9ca62f89a02253c2eee743dcab1a9524" src="https://github.com/user-attachments/assets/39493b58-a109-435a-926a-2ef5f169aa39" />
+
+
 
 2026/7/1 UG471 SelectIO Resources
 ---
