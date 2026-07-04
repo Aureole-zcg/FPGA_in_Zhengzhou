@@ -1659,6 +1659,7 @@ ADS42LB69参数
 
 <img width="1168" height="753" alt="9ca62f89a02253c2eee743dcab1a9524" src="https://github.com/user-attachments/assets/39493b58-a109-435a-926a-2ef5f169aa39" />
 
+<img width="708" height="521" alt="cb9efc66e264b0e7dcf93a01cee1ddbb" src="https://github.com/user-attachments/assets/2e868bc4-88c5-4dab-bf87-d8da7b40027e" />
 
 
 2026/7/1 UG471 SelectIO Resources
