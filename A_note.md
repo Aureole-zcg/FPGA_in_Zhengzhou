@@ -1657,6 +1657,134 @@ ADS42LB69参数
 | 无杂散动态范围SFDR | (87 ~) 90dB |
 > 使用38.4MHz的采样频率采样中频信号，ADS42LB69采样频率需≥10MSPS
 
+<img width="502" height="331" alt="image" src="https://github.com/user-attachments/assets/f2b6ac49-67f3-4cc5-a755-d7da88c213e1" />
+
+
+不同电压，温度和频率，会影响无杂散动态范围和噪声产生一定的波动
+
+ADS42LB69  
+双通道 16bit位宽（分辨率）  
+2V_PP和2.5V_PP差分满量程输入  
+SPI配置  
+应用：通信（千兆网），测试，功率放大器  
+接口选项除DDR和QDR还有 16位JESD204B  
+
+<img width="1343" height="949" alt="image" src="https://github.com/user-attachments/assets/dca63297-6d2c-4215-bb51-d8af6813ff4b" />
+
+
+SPI配置寄存器  
+
+<img width="729" height="616" alt="image" src="https://github.com/user-attachments/assets/d729a929-f595-4a14-99b0-19a9018644bf" />
+
+
+奇数：odd   
+偶数：even   
+
+输出时序图  
+
+<img width="571" height="795" alt="image" src="https://github.com/user-attachments/assets/9d82b47f-2bed-4568-8dfb-e8b280dda2a4" />
+
+
+配置寄存器的方式：1.手册 2.GUI 3.官网已配置好的复位  
+
+ADC 具有一组内部寄存器，可通过由 SEN（串行接口使能）、SCLK（串行接口时钟）、SDATA（串行接口数据）和 SDOUT（串行接口数据输出）引脚形成的串行接口进行访问。当 SEN 为低电平时，设备中的串行移位被使能。当 SEN 处于活动状态（低电平）时，串行数据 SDATA 在每个 SCLK 上升沿被锁存。当 SEN 为低电平时，串行数据在每个第 16 个 SCLK 上升沿被加载到寄存器中。当字长超过 16 位的倍数时，多余位将被忽略。在单个活动 SEN 脉冲内，数据可以以 16 位字为单位进行加载。该接口可以在 20 MHz 到非常低的速度（几赫兹）的 SCLK 频率下工作，并且也支持非 50%的 SCLK 占空比。  
+ADS42LB69实际使用的SPI配置时钟为15.625MHz  
+> 一个标准的万兆以太网MAC核，其内部逻辑通常工作在 156.25 MHz 的时钟频率下。  
+> 降频模拟：当把这个时钟频率降低10倍，变为 15.625 MHz 时，该万兆MAC核内部的数据处理速率就正好降到了千兆的水平  
+> 15.625MHz只是通过SPI配置ADC的SCK频率，与ADC工作频率不同，是千兆网的使用时钟，刚好符合ADC配置寄存器的SPI时钟要求  
+
+<img width="685" height="416" alt="image" src="https://github.com/user-attachments/assets/7154ad57-fcbf-44ff-b814-8a3296c16226" />
+
+
+复位时序：上电复位3.3V等待1ms，拉高复位信号10ns ~ 1us，再拉低复位信号100ns，SEN置低  
+
+ADS42LB69 串行寄存器写入  
+1.将 SEN 引脚拉低  
+2.将 R/W 位设置为'0'（8 位地址中的 A7 位）  
+3.将地址字段中的 A6 位设置为'0'  
+4.启动串行接口周期，指定要写入内容的寄存器地址（A5 至 A0）  
+5.在 SCLK 上升沿锁存 8 位数据。  
+
+<img width="603" height="288" alt="image" src="https://github.com/user-attachments/assets/1757e304-a5ce-4e61-ba33-aa43c567fa76" />
+
+
+> SPI使用模式0  
+
+串行寄存器读出  
+1. 将 SEN 引脚置低  
+2. 将 R/W 位（A7）设置为'1'。此设置禁用对寄存器的任何进一步写入  
+3. 将地址字段中的 A6 位设置为 0  
+4. 启动串行接口周期，指定要读取内容的寄存器地址（A5 至 A0）  
+5. 设备在 SDOUT 引脚上输出所选寄存器的内容（D7 至 D0）  
+6. 外部控制器可以在 SCLK 下降沿锁存内容   
+7. 要启用寄存器写入，请将 R/W 寄存器位重置为 '0'  
+
+<img width="602" height="256" alt="image" src="https://github.com/user-attachments/assets/64506260-ff07-4d40-bcb9-a3ea3cf207f5" />
+
+
+
+配置寄存器步骤：1.解决差分双沿 2.上电复位 3.通过SPI进行寄存器配置  
+
+串行寄存器共20个  
+
+Divide-by-1 将时钟分为1个  
+Divide-by-2 将时钟分为2个  
+
+
+Test Patterns 测试模式（训练模式）  
+寄存器地址0F  
+寄存器数据高四位对应通道A模式，第四位对应channel B  
+0F 0100 通道A输出锯齿波0 ~ 65535 (2^16)  
+GUI 内 Digital Test  Patterns可直接选择测试通道的输出模式  
+
+<img width="658" height="133" alt="image" src="https://github.com/user-attachments/assets/8a1365a4-b856-43db-8548-f5b2761eb579" />
+
+
+由于ADC输出数据可能会有不稳定情况，而导致原本统一时钟周期的个别数据对产生相位偏移，直接将数据打拍，使数据延迟一个周期，与出现不稳定情况从而错误延时的数据对齐，但一个周期的延迟不能保证数据刚好对齐，会存在不足周期的相位错位  
+根据西安第四研究所《动态相位调整技术在FPGA系统中的应用》所论述提出的DPA动态相位调整技术，对FPGA接收数据波形进行校准，将毛刺消除，得到光滑的锯齿波   
+IDELAY原语能实现数据32个档位的延迟  
+DPA需要有硬件设备支持  
+SPA静态相位调整  
+将所有数据打拍延迟一个周期进行数据的前后比较，数据错位不是1拍的位置，拉高flag信号，通过计数器来记录毛刺位置  
+找到位置后使用IDELAY原语来通过档位进行延迟  
+
+测试模式锯齿波正常就可以进行步骤（FPGA负责内容）：  
+1. 差分转单端，双沿转单沿  
+2. 复位时序配置  
+3. 配置20个寄存器  
+4. HMC7044提供时钟  
+5. 从低频6.8MHz搬移到0频基带  
+6. Fir滤波，傅里叶变换，消除实部虚部  
+7. 高速接口发送数据到DSP  
+
+FPGA主要工作内容  
+1. 晶振/HMC  
+2. 配置寄存器  
+3. 搬移至基带（欧拉公式，傅里叶变换）  
+4. Fir滤波，搬移至千兆网协议栈  
+5. 高速接口传输  
+
+板卡：太速科技 VPX-6U  
+>1U=4.445cm  
+
+千兆网：125MHz x 8位宽  
+
+ADS6142可以替换，14位宽  
+
+测试0100锯齿波的原因  
+1. DPA 有物理硬件可以直接消除毛刺  
+2. 代码消除  
+3. 为了测试ADC  
+
+内部架构  
+
+<img width="2301" height="975" alt="image" src="https://github.com/user-attachments/assets/914259d7-3b0e-446e-b5ad-3ab7114c8795" />
+
+
+射频中心带宽1621MHz 带宽10M  
+本地振荡器（LO) 将射频转成中频  
+
+
 <img width="1168" height="753" alt="9ca62f89a02253c2eee743dcab1a9524" src="https://github.com/user-attachments/assets/39493b58-a109-435a-926a-2ef5f169aa39" />
 
 <img width="708" height="521" alt="cb9efc66e264b0e7dcf93a01cee1ddbb" src="https://github.com/user-attachments/assets/2e868bc4-88c5-4dab-bf87-d8da7b40027e" />
