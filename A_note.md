@@ -1901,6 +1901,7 @@ ADC将70MHz信号采集搬移到6.8MHz(实际-6.8MHz)
 
 <img width="335" height="130" alt="image" src="https://github.com/user-attachments/assets/140b55ac-3db5-4fc6-98b6-fd3ca5e15101" />  
 
+
 <img width="282" height="84" alt="image" src="https://github.com/user-attachments/assets/bbd846fe-8a96-4e1b-a832-59de64395c60" />  
 
 由于FPGA内没有e的指数形式，所以使用欧拉公式进行变式  
