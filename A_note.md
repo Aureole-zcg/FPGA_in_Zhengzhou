@@ -1887,3 +1887,59 @@ REFCLK_FREQUENCY 参考时钟频率
 >T=1/f
 
 如果实例化了 IDelayE2 或 ODelayE2 原语，则必须实例化 IDelayCtrl 模块。IDelayCtrl 模块在其区域内持续校准各个延迟抽头（IDELAY/ODELAY），以减少工艺、电压和温度变化的影响。IDelayCtrl 模块使用用户提供的 REFCLK 校准 IDELAY 和 ODELAY。
+
+2026/7/8 DDS
+---
+ADC将70MHz信号采集搬移到6.8MHz(实际-6.8MHz)   
+ 
+时域到频域，使用傅里叶变化（第一次傅里叶）F(ω)=∫f(t)e^-jω0t dt  
+6.8→0 搬移公式（第二次傅里叶）  
+<img width="879" height="132" alt="image" src="https://github.com/user-attachments/assets/6adbf494-3912-45ea-961c-c0beffc88a82" />
+
+
+欧拉公式
+
+<img width="335" height="130" alt="image" src="https://github.com/user-attachments/assets/140b55ac-3db5-4fc6-98b6-fd3ca5e15101" />
+
+<img width="282" height="84" alt="image" src="https://github.com/user-attachments/assets/bbd846fe-8a96-4e1b-a832-59de64395c60" />
+
+由于FPGA内没有e的指数形式，所以使用欧拉公式进行变式  
+带入第二次傅里叶公式：F_2(ω)=∫ ( f(t) · e^-jω0t · e^-jω0t ) dt  
+此时只需要解决cosω和sinω的值  
+使用取模公式√A²+B² 去除欧拉公式中存在的虚部  
+可以使用matlab 去配置rom  
+>Vivado  ROM 使用.coe文件  
+也可使用DDS  
+
+根据傅里叶变换和欧拉公式可知，得到cos和sin就能实现搬频  
+>此时不使用快速傅里叶FFT  
+方法1：使用matlab  
+方法2：使用DDS  
+
+DDS （Direct Digital Synthesizer）直接数字式频率合成器  
+DDS具有低成本、低功耗、高分辨率和快速转换时间等优点，广泛使用在电信与电子仪器领域，是实现设备全数字化的一个关键技术。
+
+DDS IP核  
+相位累加器是整个DDS的核心，在这里完成相位累加，生成相位码。  
+相位累加器的输入为频率字输入K，表示相位增量，设其位宽为N，满足等式K = 2^N * f_OUT / f_CLK 。  
+其在输入相位累加器之前，在系统时钟同步下做数据寄存，数据改变时不会干扰相位累加器的正常工作。  
+DUC上搬频 DDC下搬频  
+f_OUT就是将6.8搬到0频需要频率宽度（一次搬频就是6.8M，分两次就是4.8M和2M）  
+f_CLK就是ADC采样频率  
+
+<img width="1659" height="387" alt="image" src="https://github.com/user-attachments/assets/974f54a5-0efa-4794-9bac-1bdd0bf84f37" />
+
+
+ADC是16位宽，因为DDS要同时输出cos和sin，所以DDS位宽32，即公式K中N=32  
+输出高16位为sin，低16位为cos  
+>2^ 32 × 4.8÷38.4 =536,870,912  
+
+ROM消耗BRAM资源  
+DDS主要消耗CLB资源 也消耗DSP资源  
+
+
+
+
+
+
+<img width="1674" height="2234" alt="image" src="https://github.com/user-attachments/assets/d2181103-75c7-4fc3-b30e-731bdfd0e9f9" />
