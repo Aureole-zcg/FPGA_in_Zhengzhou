@@ -1551,8 +1551,9 @@ GTP 最高速度 6.6Gb/s
 物理实现  
 A7系列有GTP Transceivers收发器（双绞线视频传输，G是Gigabyte） 最大6.6Gbit/s；  
 K7有GTX收发器（光纤），最大12.5Gb/s；  
-V7上面则是GTX/GTH/GTZ都有使用，不同型号V7支持的高速收发器类型不一样，而GTH(同轴电缆)，最大13.1Gb/s，而且只有在高端的芯片上才使用了GTZ，最大28.05Gb/s  
-高端的Virtex UltraScale +（超规模）中使用了GTM  
+V7上面则是GTX/GTH/GTZ都有使用，不同型号V7支持的高速收发器类型不一样，而GTH(同轴电缆)，最大13.1Gb/s，而且只有在高端的芯片上才使用了GTZ（高速背板），最大28.05Gb/s；  
+UltraScale/UltraScale+ 系列的主力收发器GTY(以太网，光模块），可以达到32.75Gb/s；  
+高端的Virtex UltraScale +（超规模）中使用了GTM（高速链路），单通道速率可达58 Gb/s甚至112 Gb/s；  
 传输速率：GTP < GPX < GTH < GTZ < GTY < GTM  
 
 8B/10B encoding and decoding  
