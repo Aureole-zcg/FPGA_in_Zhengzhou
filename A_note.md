@@ -1658,6 +1658,8 @@ ADS42LB69参数
 | 无杂散动态范围SFDR | (87 ~) 90dB |
 > 使用38.4MHz的采样频率采样中频信号，ADS42LB69采样频率需≥10MSPS
 
+由HMC7044传输给ADS42LB69频率38.4MHz的时钟频率
+
 <img width="502" height="331" alt="image" src="https://github.com/user-attachments/assets/f2b6ac49-67f3-4cc5-a755-d7da88c213e1" />
 
 
@@ -1730,6 +1732,7 @@ ADS42LB69 串行寄存器写入
 
 Divide-by-1 将时钟分为1个  
 Divide-by-2 将时钟分为2个  
+在时钟分频器配置为 1 分频（divide-by-1）时：ADC 采样频率 = 输入差分时钟 (CLKINP/CLKINM) 频率 = DDR 伴随输出差分时钟 (CLKOUTP/CLKOUTM) 频率；
 
 
 Test Patterns 测试模式（训练模式）  
