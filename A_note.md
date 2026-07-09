@@ -1905,7 +1905,7 @@ ADC将70MHz信号采集搬移到6.8MHz(实际-6.8MHz)
 <img width="282" height="84" alt="image" src="https://github.com/user-attachments/assets/bbd846fe-8a96-4e1b-a832-59de64395c60" />  
 
 由于FPGA内没有e的指数形式，所以使用欧拉公式进行变式  
-带入第二次傅里叶公式：F_2(ω)=∫ ( f(t) · e^-jω0t · e^-jω0t ) dt  
+带入第二次傅里叶公式：F_2(ω)=∫ ( f(t) · e^-jω0t · e^-jω0t ) dt = F(ω+ω_0)  
 此时只需要解决cosω和sinω的值  
 使用取模公式√A²+B² 去除欧拉公式中存在的虚部  
 可以使用matlab 去配置rom  
