@@ -1,4 +1,5 @@
 FPGA/ASIC内部最基础的存储单元是D触发器:  
+D触发器是具有记忆性的具有两个稳定状态的信息存储元器件  
 1. 工艺厂商提供的标准触发器，默认主流是上升沿触发(posedge ck);下降沿触发器(negedge ck)数量少、甚至部分老器件稀缺
 2. 芯片内部时钟树、PLL、锁相环的同步逻辑全部基于上升沿做时序收敛，工具(Vivado/DC)对上升沿路径优化更完善。  
 3. 若大量使用下降沿触发器:  
@@ -28,3 +29,5 @@ FPGA/ASIC内部最基础的存储单元是D触发器:
 所有通用外设、总线协议全部规定上升沿采样，是行业统一规范:  
 1. SPI、12C、UART、DDR、以太网、LVDS、ADC/DAC数字接口;  
 2. CPU、FPGA、MCU内部总线、寄存器堆、FIFO、ILA调试核;  
+
+<img width="820" height="760" alt="7d0025f1fd4058b4023287c74d47113c" src="https://github.com/user-attachments/assets/8be3fa95-f339-440a-a20d-d4e48b0f0bd2" />
