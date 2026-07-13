@@ -1365,6 +1365,7 @@ ILA .ltx文件
 ---
 fifo满了不写，空了不读  
 data_count用量  
+Altera FIFO为读写请求，Xilinx FIFO为读写使能  
 FIFO在Xilinx中异步复位为高电平有效，有保护电路时（有读时钟和写时钟(Independent Clocks Block RAM)）复位为8+60个周期，无保护电路为3+30个周期  
 默认一个潜伏期，FWFT固定0个，加D触发器可到2个或者3个  
 prog_full/empty工程满/空阈值常数（IP核设置界面第三个状态标志里）  
