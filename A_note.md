@@ -1793,6 +1793,8 @@ ADS6142可以替换，14位宽
 射频中心带宽1621MHz 带宽10M  
 本地振荡器（LO) 将射频转成中频  
 
+DSP型号TMS320C6678 （德州仪器）  
+
 
 <img width="1168" height="753" alt="9ca62f89a02253c2eee743dcab1a9524" src="https://github.com/user-attachments/assets/39493b58-a109-435a-926a-2ef5f169aa39" />
 
