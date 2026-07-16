@@ -1273,7 +1273,7 @@ Schematic Page Properties 修改页面参数
 4. 10接口电路  
    按键、LED、上拉下拉、驱动缓冲，实现外设输入输出。  
 5. 程序下载/存储电路  
-   烧录程序接口(TAG/SWD/UART)、片外Flash/EEPROM，用于固件下载与数据存储。  
+   烧录程序接口(JTAG/SWD/UART)、片外Flash/EEPROM，用于固件下载与数据存储。  
 
 2026/6/6 自我介绍
 ---
