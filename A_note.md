@@ -1993,7 +1993,7 @@ Fpass 通带频率（通频带宽度）
 Fpass=5M、Fstop=5.2M,中间0.2MHz是过渡带:  
 1. ≤5MHz:信号无损通过;  
 2. 5~5.2MHz:衰减逐步爬升，无强制指标;   
-3. >5.2MHz:干扰大幅衰减滤除;  
+3. > 5.2MHz:干扰大幅衰减滤除;  
 4. 两段频率不能重合，因为现实滤波器无法做到垂直陡峭的矩形滤波，必须预留一段频率用于幅度衰减过渡。  
 
 <img width="225" height="115" alt="image" src="https://github.com/user-attachments/assets/53043392-8557-4130-bf44-96484ca69c8c" />
