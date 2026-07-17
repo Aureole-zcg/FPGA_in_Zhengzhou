@@ -1513,6 +1513,9 @@ VCCAUX 辅助电压 存储在状态寄存器 02h
 从XADC读取的温度数据是一个16位的二进制数，但只有其中的高12位（bit 15 到 bit 4）代表了有效的温度信息。  
 do_out[15-:12] 这种写法就是从第15位开始，向下数（递减方向）共12位。
 
+<img width="893" height="157" alt="image" src="https://github.com/user-attachments/assets/7e6b07aa-a91d-496a-9f06-c910312cf93a" />
+
+
 2026/6/24 资源替换
 ---
 1. .XDC约束文件  
