@@ -2060,7 +2060,42 @@ udp_ip_protocl_stack 协议栈模块 64位数据位，八位掩码
 GMII 千兆网 88E1111  
 OSI七层模型  
 
+2026/7/20 pg007 SRIO Gen2
+---
+SRIO在VPX-6U测试之前，必须在K7或V7板卡上测试成功  
 
+SRIO (Serial RapidIO) 串行高速IO口 (Gen2 第二代）  
+在Xilinx中作为IP核使用  
+SRIO支持1x，2x，4x通道（lane）宽度  
+SRIO使用AXI4-Stream和AXI4-Lite接口  
+引脚：ready, vaild, data, keep, (length,user), last  
+> S7没有SRIO资源支持
 
+支持每通道 1.25、2.5、3.125、5.0 和 6.25 Gbaud 的速率  
+最大速率25Gbps (6.25GBand x 4Lane)  
+默认3.125GBand x 1Lane  
+> 比特率（Gb/s） = 符号速率（GBaud） × 每符号比特数
 
+逻辑层：  
+Doorbell 门铃，事务，指SRIO可以使用仅16位 Info 字段来发送写通知  
+帧头ID可以改  
 
+SRIO作为高速接口，在通信处理器上使用率很高  
+可以同时收发  
+架构：  
+<img width="780" height="568" alt="image" src="https://github.com/user-attachments/assets/d5e31112-b0fb-4cd4-ad2b-1bc8900ba803" />  
+PHY：物理层
+
+应用：通信，嵌入式，无线基站，无线电设备控制，工业设备，图像处理等多处理器互联
+
+SRIO需要Licensing，需要绑定设备MAC地址，工作中需要公司申请或购买长期许可
+
+<img width="754" height="367" alt="image" src="https://github.com/user-attachments/assets/aa558a35-4ef1-4d44-be42-554f6ea643a8" />
+
+主要详细管脚：（一个请求对应一个相应）
+|通道|信号方向|作用(从用户逻辑视角)|
+|:---|:---|:---|
+|s_axis_ireq|用户逻辑→SRIO IP(Slave)|接收上游本地模块数据，打包NWRITE/SWRITE/门铃发往对端|
+|m_axis_iresp|SRIO IP→用户逻辑(Master)|接收对端返回的读响应包|
+|m_axis_treq|SRIO IP→用户逻辑(Master)|接收对端通过SRIO总线发来的数据，输出给下游模块|
+|s axis_tresp|用户逻辑→SRIO IP(Slave)|给对端下发写事务回复响应包|
