@@ -1603,7 +1603,8 @@ GTX 收发器中的 CPLL 具有 1.6 GHz 至 3.3 GHz 的标称工作范围。GTH 
 <img width="528" height="70" alt="image" src="https://github.com/user-attachments/assets/75123caf-2cc8-4b23-a263-697e39deb24d" />
 
 
-板卡间进行光纤传输的顺序：电→光→光→电
+板卡间进行光纤传输的顺序：电→光→光→电   
+除了光纤，还有使用背板进行板卡连接
 
 2026/6/28 软件无线电
 ---
