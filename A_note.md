@@ -1814,6 +1814,8 @@ ADS6142可以替换，14位宽
 2. 代码消除  
 3. 为了测试ADC  
 
+由于ADC分为A通道和B通道，两通道之间一般会使用散热冷板或屏蔽笼分割，避免相互干扰
+
 内部架构  
 
 <img width="2301" height="975" alt="image" src="https://github.com/user-attachments/assets/914259d7-3b0e-446e-b5ad-3ab7114c8795" />
