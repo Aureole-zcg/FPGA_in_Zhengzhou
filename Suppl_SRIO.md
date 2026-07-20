@@ -1,3 +1,29 @@
+SRIO事务及其类型  
+SRIO(Serial Rapid lI0) 事务(transaction) 类型由SRIO包 (packet) 中的Ftype和Ttype决定，其中比较重要的是Nread (Ftype =2,Ttype=4)，功能是读制定的地址;
+
+NWRITE(Ftype=5,Ttype =4)表示往指定的地址写数据;
+
+NWRITE_R(Ftype=5，Ttype=5)，表示往指定的地址写数据，写完之后接收目标期间的响应，即所谓的带响应的写;
+
+SWRITE(Ftype =6,Ttype保留)，表示以流写方式写指定的地址,与NWRITE以及NWRITE_R相比这种方式效率最高；
+
+DOOREBELL(Ftype=10，Ttype保留)，这是一个门铃中断  
+
+事务类型：  
+|包类型|FTYPE取值(4bit)|对应表格行|
+|:---|:---|:---|
+NREAD|2|第一行|
+NWRITE|5|第二行|
+SWRITE|6|第三行|
+DB(Doorbell门铃)|10|第四行|
+MSG消息|11|第五行|
+RESP响应包|13|第六行|
+Data Stream数据流|9|第七行|
+
+若包头tdata[55:52]==4'd5 → 当前就是NWRITE写数据包，左边8bit 就是源设备ID srcTID;  
+若tdata[55:52]==4'd10 → 当前就是DB门铃包，左边8bit 同样是源设备ID srcTID;  
+哪怕最左侧都是8bit宽度，只要FTYPE不同，整行包头结构、剩余比特的定义全部跟着变。  
+
 PGO07 SRIO高速接口:收发都得调通，ug471 IO资源  
 情形1:FPGA给DSP(FPGA调IP核，DSP是C语言封装好的驱动函数不是调核)  
 情形2:FPGA和两片DSP通信，如vpx  
