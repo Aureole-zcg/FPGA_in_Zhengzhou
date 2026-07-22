@@ -2153,7 +2153,40 @@ Shared Logic更改IP核作为接收方还是发送方角色
 
 引脚link_initialized和port_initialized两个初始化校验完成信号，类似mig核初始化ddr3
 
+2026/7/21 pg046 Aurora 8B/10B
+---
+> Aurora 极光
 
+A7芯片只支持Aurora 8B/10B  
+K7芯片支持Aurora 8B/10B外还支持64B/66B  
+> 与SRIO相同，S7不支持Aurora
 
+Aurora使用CDCM61004提供的125MHz时钟
 
+AMD LogiCORE™ IP Aurora 8B/10B 支持 AMBA 协议 AXI4-Stream 用户界面接口
+
+吞吐量范围从 480 Mb/s 到 84.48 Gb/s  
+IP核GT Selections界面可选择1 ~ 8个Lane   
+1. 核心参数假设  
+- 编码方式:Aurora 64B/66B(开销仅3.03%,远低于8B/10B的25%)  
+- Lane数量:16 Lane(Xilinx高端 FPGA如 Virtex UltraScale+支持多 Quad聚合)  
+- 单Lane线速率:5.4Gbps(这是64B/66B协议下,配合特定器件与参考时钟的典型高速配置)  
+- 有效编码效率:64/66=0.9697  
+2. 计算公式  
+总吞吐量=单Lane线速率xLane数量x有效编码效率  
+总吞吐量=5.4 Gbps×16 x 64/66  
+=86.4 Gbps x 64/66  
+≈86.4×0.9697  
+≈84.48 Gbps  
+
+支持GTX，GTH中使用  
+AXI4-Stream可选择帧模式或者流模式  
+<img width="792" height="392" alt="image" src="https://github.com/user-attachments/assets/8f07059c-b84a-47eb-940c-df202e00efa6" />
+Stream流模式：每经过1万字节，拉低停止12个字节，停止方式：握手协议（主机控制叫流控，从机控制叫CC（反压，时钟补偿））停止  
+Fram帧模式：根据固定的帧结构  
+都是无限制发送，但有硬件保护电路提供CC时钟补偿  
+
+流控  
+<img width="612" height="462" alt="image" src="https://github.com/user-attachments/assets/0ab7785d-c96d-4b32-b6d5-7c08795d36ae" />
+一般选择默认流控  
 
