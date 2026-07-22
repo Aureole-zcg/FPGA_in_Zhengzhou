@@ -2187,6 +2187,6 @@ Fram帧模式：根据固定的帧结构
 都是无限制发送，但有硬件保护电路提供CC时钟补偿  
 
 流控  
-<img width="612" height="462" alt="image" src="https://github.com/user-attachments/assets/0ab7785d-c96d-4b32-b6d5-7c08795d36ae" />
+<img width="612" height="462" alt="image" src="https://github.com/user-attachments/assets/0ab7785d-c96d-4b32-b6d5-7c08795d36ae" />  
 一般选择默认流控  
 
