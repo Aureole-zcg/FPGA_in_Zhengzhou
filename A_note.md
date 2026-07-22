@@ -2180,13 +2180,77 @@ IP核GT Selections界面可选择1 ~ 8个Lane
 ≈84.48 Gbps  
 
 支持GTX，GTH中使用  
+
+<img width="869" height="471" alt="image" src="https://github.com/user-attachments/assets/4aad5015-2c77-4a9c-8db8-93397d360679" />
+
+应用：芯片间连接，板间和背板连接
+
+Aurora也需要Licens 许可，但不需要额外申请，自带许可
+
+<img width="608" height="286" alt="image" src="https://github.com/user-attachments/assets/514c8c7c-5785-412a-bcd4-ea9af6edeebd" />  
+
+Aurora通过TX和RX接受和发送数据，TX数据来源主要有图像，传感器，ADC，或其他工作阶段数据
+
 AXI4-Stream可选择帧模式或者流模式  
-<img width="792" height="392" alt="image" src="https://github.com/user-attachments/assets/8f07059c-b84a-47eb-940c-df202e00efa6" />
+<img width="792" height="392" alt="image" src="https://github.com/user-attachments/assets/8f07059c-b84a-47eb-940c-df202e00efa6" />  
 Stream流模式：每经过1万字节，拉低停止12个字节，停止方式：握手协议（主机控制叫流控，从机控制叫CC（反压，时钟补偿））停止  
 Fram帧模式：根据固定的帧结构  
 都是无限制发送，但有硬件保护电路提供CC时钟补偿  
 
+clock compensation (CC)时钟补偿，反压  
+CC：从机发送的ready信号拉低，实现时钟补偿  
+流控：将主机发送的valid信号拉低来控制输出数据  
+Aurora 8B/10B 核心在发送时钟补偿序列时自动中断数据传输。时钟补偿序列每 10,000 字节对每条线路产生 12 字节的额外补偿  
+<img width="609" height="276" alt="image" src="https://github.com/user-attachments/assets/86807b7e-d0d2-4b53-b12b-600433b8a40b" />  
+从机ready信号拉低，Data3数据维持12个字节长度  
+>当s_axi_tx_tdata [0:(8n-1)]的n等于1，拉低12个字节长度就是拉低12个周期
+
+每条线路每 10,000 字节需要时钟补偿（对于每线路 2 字节设计为 5,000 时钟；对于每线路 4 字节设计为 2,500 时钟）  
+>意为：由于每条线路每发满 10,000 字节数据就得做一次时钟补偿（总线越宽，凑够这 10,000 字节用的时钟周期数就越少，比如 2 字节宽是 5,000 个周期，4 字节宽是 2,500 个周期）。
+
+<img width="869" height="192" alt="image" src="https://github.com/user-attachments/assets/44f7c50c-c48f-4fa5-9b9f-f4082548a9b1" />
+
 流控  
 <img width="612" height="462" alt="image" src="https://github.com/user-attachments/assets/0ab7785d-c96d-4b32-b6d5-7c08795d36ae" />  
 一般选择默认流控  
+Aurora可以发送任意字节长度，但是发送中会使用流控 Flow control  
+<img width="565" height="293" alt="image" src="https://github.com/user-attachments/assets/f9094bea-b624-47a5-a9b5-111fec946ef0" />  
+用户应用程序通过拉低 s_axi_tx_tvalid 来暂停数据流，并传输空闲信号，暂停持续到 s_axi_tx_tvalid 回高  
+原生/本地流控制（NFC）  
+用户流控制（UFC）  
+IP核流控选择默认即可  
+
+引脚  
+<img width="388" height="649" alt="image" src="https://github.com/user-attachments/assets/3ce1556a-1877-4f17-a7ad-f3e78ae5cb4c" />  
+s_axi_tx_tready和s_axi_tx_tvaild握手之后，发送s_axi_tx_tdata, s_axi_tx_tkeep, s_axi_tx_tlast  
+s_axi_tx_tlast拉高说明数据发送完毕  
+txn和txp差分线发送数据  
+1. 参考时钟输入正常,GT的PLL锁定(pll_not_locked拉低、rx_resetdone_out拉高);  
+2. 对端 Aurora 正常发数据,本端lane_up、channel_up拉高,链路建立成功;  
+3. 对端通过 USER_DATA_S_AXI_TX发送AXI数据流,经过高速串行链路传到本端差分RX,最终本端从M_AXI_RX拿到还原后的数据流。  
+
+发送方通过txp, txn发送数据，接收端通过rxn, rxp接收  
+txp, txn发送数据前需要配置axi_data内容，rxn, rxp接收后通过axi_data将数据传输给FPGA
+
+顶层架构  
+<img width="410" height="323" alt="image" src="https://github.com/user-attachments/assets/753b948f-e256-491c-a800-359dcbb456ce" />
+
+AXI4-Stream 接口位顺序  
+<img width="637" height="163" alt="image" src="https://github.com/user-attachments/assets/8832106d-6470-41b6-af39-17ee708fb4ab" />  
+低位先发，两个字节拼一起发送（16位宽）
+
+<img width="616" height="467" alt="image" src="https://github.com/user-attachments/assets/8f039e58-dcab-41b4-a242-579e290ff412" />  
+
+报错信号，作用与初始化校验完成信号类似，报错信号为1为报错（高有效）  
+<img width="190" height="167" alt="image" src="https://github.com/user-attachments/assets/60b99047-96b0-40e2-a532-8a3103dc415e" />  
+除报错信号外channel_up, lane_up, rx_resetdone_out,  tx_resetdone_out需要拉高  
+tx_lock需为低电平
+
+复位要求  
+<img width="585" height="176" alt="image" src="https://github.com/user-attachments/assets/395d4070-e166-4a5f-ab65-7e6ed562ab83" />  
+gt_reset复位前需要拉高128个时钟周期，reset需要在gt_reset拉低前也拉高128个时钟周期，且在gt_reset拉低后再保持128个时钟周期才拉低以完成复位
+
+Aurora的共享逻辑IP核  
+<img width="1748" height="1031" alt="image" src="https://github.com/user-attachments/assets/803c5941-df31-4001-8e54-00bc24c2b033" />
+将部分输出和输入调换，以满足两个IP核之间可以互相通信，是多核设计中，为了节省关键FPGA资源、简化时钟设计并保持灵活性而采取的优化策略。
 
