@@ -2240,6 +2240,7 @@ AXI4-Stream 接口位顺序
 低位先发，两个字节拼一起发送（16位宽）
 
 <img width="616" height="467" alt="image" src="https://github.com/user-attachments/assets/8f039e58-dcab-41b4-a242-579e290ff412" />  
+
 Aurora 错误信号汇总表  
 
 | 信号名称 | 协议版本 | 适用核类型 | 方向 | 功能描述 |
