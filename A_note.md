@@ -922,7 +922,7 @@ Task和function区别
 3. 函数只能与主模块共用同一个仿真时间单位，而任务可以定义自己的仿真时间单位。
 4. 函数至少要有一个输入变量，而任务可以没有或有多个任何类型的变量。
 
-2026/4/27
+2026/4/27 generate for
 ---
 GPS检验位，美元符之后至字段12，依次每位进行异或组成<CR><LF>,*hh表示16进制
 ASCII码转十进制数字，可以直接取低四位，data[3:0]
@@ -950,6 +950,40 @@ task	top_2();
 	for(j=0;j<=199;j=j+1)	  //调用 top_1 任务200次  
 		top_1(a_mem[j]);  	
 	endtask
+```
+
+generate  
+```  
+genvar i;  
+	generate  
+	for(i=0;i<12;i=i+1)  
+		begin:portx_input_path_tdest  
+		input_path_tdest portx_input_path_tdest   
+		(  
+		.switch_clk (/*s_axi_aclk*/switch_clk),  
+		.switch_rstn (/*switch_and_fifo_aresetn*/switch_rstn)  
+		);  
+endgenerate  
+```  
+注意点:  
+(1)例化模块在for循环内部  
+(2)for循环需加名字  
+(3)genvar定义在generate外面，可以全局使用(不推荐使用，最好一个generate for，对应一个循环变量)  
+for循环写多个always块或者写多个assign语句  
+```  
+genvar i；  
+generate  
+	for(i=0;i<12;i=i+1)  
+		begin:portx_input_path_tdest  
+		always @(posedge clk or posedge rst)   
+		begin  
+			if (rst) begin // reset  
+				end  
+			else if ()  
+				begin  
+				end  
+		end  
+endgenerate  
 ```
 
 <img width="966" height="392" alt="image" src="https://github.com/user-attachments/assets/027d5221-330d-462d-8131-dc7f90738b3b" />
