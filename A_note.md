@@ -2193,6 +2193,10 @@ Aurora也需要Licens 许可，但不需要额外申请，自带许可
 
 Aurora通过TX和RX接受和发送数据，TX数据来源主要有图像，传感器，ADC，或其他工作阶段数据
 
+Aurora IP核配置  
+<img width="1003" height="708" alt="image" src="https://github.com/user-attachments/assets/43ce473c-b624-4d51-a5b1-1c19c01bf3b5" />
+
+
 AXI4-Stream可选择帧模式或者流模式  
 <img width="792" height="392" alt="image" src="https://github.com/user-attachments/assets/8f07059c-b84a-47eb-940c-df202e00efa6" />  
 Stream流模式：每经过1万字节，拉低停止12个字节，停止方式：握手协议（主机控制叫流控，从机控制叫CC（反压，时钟补偿））停止  
