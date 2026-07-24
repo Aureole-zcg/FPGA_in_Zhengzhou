@@ -1349,7 +1349,8 @@ bit流文件
 
 .xpr 工程文件  
 xdc文件 约束  
-.veo IP核例化
+.veo IP核例化  
+> 时序约束文件：Quartus→ .sdc       Xilinx→ .xdc
 
 CMTS 时钟管理单元：（K7有1PLL + 1MMCM)  
 PLL锁相环 最多生成6个时钟  
