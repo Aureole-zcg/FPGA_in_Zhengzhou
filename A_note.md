@@ -2455,4 +2455,4 @@ Errors正常值为0E0
 
 <img width="1003" height="611" alt="image" src="https://github.com/user-attachments/assets/b0181913-2155-4581-993a-fd767e2c5350" />
 
-不同板卡的最小建立时间和保持时间不同，参数需要依照手册确定
+不同板卡的最小建立时间和保持时间不同，参数需要依照手册《Kintex‐7 FPGAs Data Sheet:DC and AC Switching Characteristics》确定
