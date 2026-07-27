@@ -2387,3 +2387,72 @@ IBERT是Xilinx FPGA内置的高速收发器(GT)专用调试IP，用于物理层�
 4. 无明显失真:眼图左右对称，没有畸变、拖尾，说明链路阻抗匹配良好，反射小  
 
 IBERT图像全红无眼图则为不通
+
+管脚
+<img width="307" height="176" alt="image" src="https://github.com/user-attachments/assets/a30b95c6-bc67-4baf-8619-453a19bd5d4c" />
+
+IP核配置
+<img width="1108" height="359" alt="image" src="https://github.com/user-attachments/assets/40a72709-3a79-41a3-b2f2-4d60f81de863" />
+
+LineRate 测SRIO就是SRIO的速率3.125  
+DataWidth ADC使用16位宽数据输出  
+Refclk 测SRIO就是SRIO的时钟频率125  
+Quad Count 测试一个Q的所有channel  
+PLL使用均可  
+
+<img width="952" height="370" alt="image" src="https://github.com/user-attachments/assets/2778cf63-9323-4809-9cf6-8c335cef63bf" />
+
+GTP Location  
+Protocol Select 就是前一个界面的配置选择  
+Refclk Select需要查板卡  
+> 使用的是A7板卡 参考时钟通道为MGTREFCLK1P_216和MGTREFCLK1N_216
+
+<img width="585" height="186" alt="image" src="https://github.com/user-attachments/assets/7c45bf59-88e1-4009-a0d5-9a520ce15ced" />
+
+IO标准使用的是差分1.5V，后续需要配置.xdc文件  
+.xdc文件中写的是SFP外设需要的约束引脚电压是3.3V，IP核里的是底层资源BANK里GT的电压1.5V
+
+IBERT可以和mig核一样直接生成例化文件  
+Sources→IP Sources→右键ibert IP→Open IP Example Design  
+在例化项目顶层文件中，需要添加两个输出用于连接SFP的输出管脚TX ,并赋值为0以确保有效  
+然后添加这两个引脚的.xdc，添加引脚号，引脚标准LVCMOS33以及引脚名称  
+
+测试需要上板，并固化bit流文件，SFP光模块的插拔使用接口拉环
+
+
+
+界面下方Serial I/O Link→ + →Creat Scan →选择Link →OK  
+> 不同板卡携带的光模块接口数量不同
+
+<img width="585" height="186" alt="image" src="https://github.com/user-attachments/assets/cc2cf28c-2844-4262-8d77-46694d3f23e2" />
+
+误码率Errors 通过Reset重置，首次上板有误码率是由于干扰产生的正常情况  
+全称:Bit Error Rate 中文:误码率  
+含义:传输过程中，出错的比特数/总传输比特数，是通信、数字信号里最常用的指标之一。  
+Errors正常值为0E0
+
+眼图的蓝色区域太小会发生时钟抖动，会加剧亚稳态情况发生
+
+时钟抖动  
+<img width="983" height="500" alt="image" src="https://github.com/user-attachments/assets/f0caddfc-d7a0-4309-8c4d-87e318699db1" />
+
+时钟抖动 (Timing Jitter)   
+是时钟边沿本身的时间位置偏差，表现为时钟周期/相位的随机或确定性波动，本质是时钟信号质量问题。  
+- 成因:晶振噪声、电源纹波、PLL/MMCM不稳定、布线串扰等。  
+- 表现:同一个时钟信号，相邻周期时长不一样，边沿提前或滞后  
+亚稳态(Metastability)  
+是寄存器采样行为的故障，发生在数据/控制信号在寄存器建立/保持时间窗口内跳变时，输出进入不确定状态，本质是时序违例导致的采样失败  
+- 成因:建立时间/保持时间不满足、异步信号跨时钟域、时钟抖动压缩了安全裕量。  
+- 表现:寄存器输出在0/1之间徘徊一段时间，最终可能随机落到0或1，导致功能错误。  
+两者的关系  
+- 时钟抖动会加剧亚稳态风险  
+抖动会让时钟边沿“乱跑”，压缩了数据的建立/保持时间窗口，更容易让数据落在采样窗口内，从而提高亚稳态发生概率。  
+- 亚稳态不会产生时钟抖动  
+亚稳态是寄存器采样的问题，不会反过来影响时钟信号的边沿位置，所以亚稳态不是时钟抖动的成因。  
+简单类比  
+时钟抖动:就像公交车到站时间不准(有时早到、有时晚到)。  
+亚稳态:就像乘客在车门开关瞬间上下车，被夹在中间，既没上车也没下车，最后随机被推到一边。  
+
+<img width="1003" height="611" alt="image" src="https://github.com/user-attachments/assets/b0181913-2155-4581-993a-fd767e2c5350" />
+
+不同板卡的最小建立时间和保持时间不同，参数需要依照手册确定
