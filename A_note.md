@@ -2318,7 +2318,7 @@ Aurora的共享逻辑IP核
 <img width="1748" height="1031" alt="image" src="https://github.com/user-attachments/assets/803c5941-df31-4001-8e54-00bc24c2b033" />
 将部分输出和输入调换，以满足两个IP核之间可以互相通信，是多核设计中，为了节省关键FPGA资源、简化时钟设计并保持灵活性而采取的优化策略。
 
-CDCM61004 光纤眼图测距
+2026/7/22 CDCM61004 光纤眼图测距
 ---
 CDCM61004输出时钟占空比50%
 
@@ -2332,8 +2332,8 @@ CDCM61004输出时钟占空比50%
 
 <img width="312" height="95" alt="image" src="https://github.com/user-attachments/assets/3e95f3c2-02d9-4261-a6d7-e95ac1eb553d" />
 
-K7板卡时钟关系
-### CDCM61004 典型应用配置与参数解释（整合版，含Aurora/SRIO补充）
+K7板卡时钟关系  
+CDCM61004 典型应用配置与参数解释（整合版，含Aurora/SRIO补充）
 
 | Prescale Divider | Feedback Divider | PR1/PR0 | VCO MHz | Output Divider | OD2/OD1/OD0 | Output MHz | Application | **应用备注（场景说明）** |
 | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :--- | :--- |
