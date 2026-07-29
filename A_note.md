@@ -2355,6 +2355,10 @@ Aurora的共享逻辑IP核
 <img width="1748" height="1031" alt="image" src="https://github.com/user-attachments/assets/803c5941-df31-4001-8e54-00bc24c2b033" />
 将部分输出和输入调换，以满足两个IP核之间可以互相通信，是多核设计中，为了节省关键FPGA资源、简化时钟设计并保持灵活性而采取的优化策略。
 
+代码实现上，由于系统运行前需要channel_up, lane_up, rx_resetdone_out,  tx_resetdone_out的拉高，当有信号拉低时，系统整体不再继续向外传输数据，需要等待复位操作完毕后，才可重新判断完成信号是否拉高，在判断完成信号由高电平转换为低电平，即判断完成信号是否失效时，使用移位寄存器来存储旧值和新值，拆开判断以确定是否出现下降沿
+`link_flag_dd <= {link_flag_dd[0], link_flag};`
+`if (link_flag_dd[0] == 1'b0 && link_flag_dd[1] == 1'b1)`
+
 2026/7/22 CDCM61004 光纤眼图测距
 ---
 CDCM61004输出时钟占空比50%
