@@ -2310,6 +2310,10 @@ txn和txp差分线发送数据
 发送方通过txp, txn发送数据，接收端通过rxn, rxp接收  
 txp, txn发送数据前需要配置axi_data内容，rxn, rxp接收后通过axi_data将数据传输给FPGA
 
+**发送接口** (`s_axi_tx_*`)：Aurora IP核在这里扮演从机（Slave） 的角色。它等待外部用户逻辑（作为主机）将需要发送的数据“推”给它。
+
+**接收接口** (`m_axi_rx_*`)：Aurora IP核在这里扮演主机（Master） 的角色。它将从链路上接收到的数据主动“推”给外部用户逻辑（作为从机）。
+
 顶层架构  
 <img width="410" height="323" alt="image" src="https://github.com/user-attachments/assets/753b948f-e256-491c-a800-359dcbb456ce" />
 
