@@ -1357,14 +1357,14 @@ DC-DC (开关稳压器)：其本质是一个开关电源。它通过高速开关
 1. 熟练掌握FPGA架构(如 Xilinx7系列，Altera Cyclone系列)及工作原理，了解CLB,LUT,BRAM,DSP等资源特性;
 2. 熟练使用FPGA在线调试方法，如使用ILA(Xilinx)，SignalTap(Altera)抓取内部信号，定位时序或功能问题;
 3. 熟练掌握FPGA设计流程:需求分析，RTL编码，仿真验证，综合，实现，时序约束与分析，板级调试;
-4. 熟练掌握Xilinx FPGA原语，能根据设计需求灵活调用IDELAY-2、1BUFDS、IDDR原语等，深入理解原语与硬件资源的映射关系;
+4. 熟练掌握Xilinx FPGA原语，能根据设计需求灵活调用IDELAY-2、IBUFDS、IDDR原语等，深入理解原语与硬件资源的映射关系;
 5. 熟练掌握Vivado，Quartus工具的综合，布局布线，能进行时序分析，优化设计以满足时序要求;
 6. 熟练掌握Xilinx7系列底层资源以及器件选型(时钟资源，逻辑资源，I/O资源，DSP资源，高速收发器资源，布线资源);
 7. 熟练掌握硬件描述语言VerilogHDL，能独立完成复杂模块的RTL设计;
 8. 熟练使用ModelSim进行功能仿真，编写Testench验证模块功能，包括定向测试，随机测试;
 9. 熟练使用XDC(Xilinx)编写约束文件，包括时钟约束，输入输出延迟，多时钟域处理;
 10. 熟练掌握三大低速总线UART，SPI，I2C;
-11. 熟练掌握高速接口:GMIl/RGMII/SGMIl,DDR3,LVDS,Aurora,SRIO,AX14,干兆以太网等;
+11. 熟练掌握高速接口:GMIl/RGMII/SGMIl,DDR3,LVDS,Aurora,SRIO,AXI4,干兆以太网等;
 12. 熟练使用Vivado IP 核的调用(PLL, RAM, FIFO, shift RAM, FFT,Ethernet MAC等);
 13. 熟练掌握 DDR3，FLASH，EEPROM，SDRAM等存储外设使用;
 14. 熟练使用串口调试助手，网络调试助手，Wireshark等工具进行分析;
