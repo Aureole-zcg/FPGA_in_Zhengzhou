@@ -2621,8 +2621,8 @@ create_clock -name clk1 -period 8.0 -waveform {2 8} [get_ports clk1]
 
 .xdc文件在Open Implemented Design配置引脚后会生成部分内容，时钟约束则需要自行添加  
 ```
-# 50MHz主时钟时序约束  
-create_clock -period 20 -name clk [get_ports clk]  
+# 50MHz主时钟时序约束
+create_clock -period 20 -name clk [get_ports clk]
 
 # ========== IO电平标准 LVCMOS33 全部端口 ==========  
 set_property IOSTANDARD LVCMOS33 [get_ports clk]  
