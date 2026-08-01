@@ -2509,7 +2509,7 @@ Errors正常值为0E0
 
 不同板卡的最小建立时间和保持时间不同，参数需要依照手册《Kintex‐7 FPGAs Data Sheet:DC and AC Switching Characteristics》确定
 
-时序约束
+2026/7/24 时序约束
 ---
 .xdc文件约束对象  
 1. IO（引脚，电平标准）  
@@ -2590,3 +2590,69 @@ Tskew：时钟余量/时钟歪斜，同一个时钟边沿，到达发送端寄�
 
 周期约束也叫做主时钟约束，主时钟通常有两种情形，一种是时钟由外部时钟源提供，通过时钟引脚进入FPGA,该时钟引脚绑定的时钟为主时钟；另一种是高速收发器的时钟RXOUTCLK或TXOUTCLK。对于7系列FPGA,需要对GT的这两个时钟手工约束：对于UltraScale系列芯片，只需要对GT的输入时钟约束即可，Vivado会自动对这两个时钟进行约束。
 
+时序约束分类  
+时序约束:数字电路设计中，工程师向EDA工具定义的电路时序要求，确保电路在目标频率下正确工作。  
+分类:  
+1. 时钟约束:定义时钟频率、周期、占空比、偏移等属性。  
+2. I/O延迟约束:约束外部信号与芯片接口的时序关系。  
+3. 时序例外约束:处理特殊路径(多周期路径、虚假路径等)。  
+4. 跨时钟域约束:约束异步时钟间的数据传输路径。  
+5. 其他约束:如保持时间、时钟不确定性等补充约束。  
+
+.xdc时序约束命令  
+create_clock -name <name> -period <period> -waveform {<rise_time> <fall_time>} [get_ports <input_port>]  
+|参数|含义|
+|:---|:---|
+|-name|时钟名称|
+|-period|时钟周期，单位ns|
+|-waveform|波形参数，第一个参数为时钟的第一个上升沿时刻，第二个参数为时钟的第一个下升沿时刻|
+|-add|在同一时刻源上定义多个时钟时使用|
+> 尖括号内为替换参数，-name和 -period可以交换顺序
+
+waveform波形参数是以0ns为原点的坐标轴形式定义的，-waveform {0 5} 就是10n一个周期的时钟方波  
+
+<img width="721" height="286" alt="image" src="https://github.com/user-attachments/assets/a444d131-3894-48ba-a80a-a6fff15fb7d8" />
+
+则时钟约束为:  
+create_clock -name clk0 -period 10.0 -waveform {0 5} [get_ports clk0]  
+create_clock -name clk1 -period 8.0 -waveform {2 8} [get_ports clk1]  
+
+约束中的数字的单位默认是ns，若不写wavefrom参数，则默认是占空比为50%且第一个上升沿出现在0时刻。使用report_clocks指令可以查看约束是否生效。
+
+.xdc文件在Open Implemented Design配置引脚后会生成部分内容，时钟约束则需要自行添加  
+```
+# 50MHz主时钟时序约束  
+create_clock -period 20 -name clk [get_ports clk]  
+
+# ========== IO电平标准 LVCMOS33 全部端口 ==========  
+set_property IOSTANDARD LVCMOS33 [get_ports clk]  
+set_property IOSTANDARD LVCMOS33 [get_ports rst_n]  
+set_property IOSTANDARD LVCMOS33 [get_ports led0]  
+set_property IOSTANDARD LVCMOS33 [get_ports led1]  
+set_property IOSTANDARD LVCMOS33 [get_ports led2]  
+set_property IOSTANDARD LVCMOS33 [get_ports led3]  
+
+# ========== 物理引脚绑定 PACKAGE_PIN ==========  
+set_property PACKAGE_PIN V4 [get_ports clk]  
+set_property PACKAGE_PIN P14 [get_ports rst_n]  
+set_property PACKAGE_PIN E21 [get_ports led0]  
+set_property PACKAGE_PIN D21 [get_ports led1]  
+set_property PACKAGE_PIN E22 [get_ports led2]  
+set_property PACKAGE_PIN D22 [get_ports led3]  
+```
+
+打开Open Implemented Design后可使用命令查看时钟约束信息  
+`report_clocks`指令在Tcl Console中输入查询可生成时钟报告，可查询主时钟频率  
+`report_clock_networks -name mainclock`指令在Tcl Console中输入会生成Clock Networks，可观察Device界面中时钟关系  
+时钟有问题会在Timing界面显示时钟报警来显示时钟违例情况
+
+<img width="1230" height="858" alt="image" src="https://github.com/user-attachments/assets/f620ec84-6ab7-4b6e-99b1-6851a8badf67" />
+
+.xdc文件的目的就是让vivado自发检查所有延迟看能不能改变重要且违规的时序路径
+
+总结：  
+1. 时序约束的原因：建立时间保持时间不满足容易产生亚稳态  
+2. 时序约束分类  
+3. 时序路径，时序模型，时序约束公式  
+4. .xdc文件对时钟进行约束的命令  
+5. 布局布线编译让vivado自发检查所有延迟看能不能改变重要且违规的时序路径  
