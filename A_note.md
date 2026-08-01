@@ -2508,3 +2508,85 @@ Errors正常值为0E0
 <img width="1003" height="611" alt="image" src="https://github.com/user-attachments/assets/b0181913-2155-4581-993a-fd767e2c5350" />
 
 不同板卡的最小建立时间和保持时间不同，参数需要依照手册《Kintex‐7 FPGAs Data Sheet:DC and AC Switching Characteristics》确定
+
+时序约束
+---
+.xdc文件约束对象  
+1. IO（引脚，电平标准）  
+2. 时钟
+
+在clk上升沿到来之前，数据提前一个最小时间量“预先准备好”，这个最小时间就是建立时间；  
+在clk上升沿到来之后，数据必须保持一个最小时间量“不能变化”，这个最小时间量就是保持时间；  
+每个板卡对应的建立时间和保持时间不同，具体查询《Kintex‐7 FPGAs Data Sheet:DC and AC Switching Characteristics》手册  
+
+<img width="380" height="273" alt="image" src="https://github.com/user-attachments/assets/8d6a84a5-a62d-498e-bc2b-a3a76799b6b8" />
+
+需要保证数据在建立时间和保持时间内保持稳定  
+不满足建立时间和保持时间原因：  
+布线延迟（竞争）  
+时钟错误  
+
+.xdc文件可以直接告诉编译器时钟周期情况，常用于解决时序违例
+
+两个均含有RS锁存器的D锁存器构成上升沿触发的D触发器
+
+时序路径  
+典型的时序路径有4类，如下图所示，这4类路径可分为片间路径（标记①和标记③)和片内路径（标记②和标记④）。  
+
+<img width="794" height="535" alt="image" src="https://github.com/user-attachments/assets/2ab5519c-6108-4488-954e-532068bee3e9" />
+
+| 时序路径 | 起点 | 终点 | 应用约束 |
+| :--- | :--- | :--- | :--- |
+| ①输入端口到FPGA内部第一级触发器的路径 | **输入端口 (data_in)** | rega/D | set_input_delay |
+| ②FPGA内部触发器之间的路径 | **rega/Q** | regb/D | create_clock (定义时钟周期) |
+| ③FPGA内部末级触发器到输出端口的路径 | **regb/Q** | **输出端口 (data_out)** | set_output_delay |
+| ④FPGA输入端口到输出端口的路径（纯组合） | 输入端 | 输出端 | set_max_delay |
+
+时序模型  
+一个完整的时序路径包括源时钟路径、数据路径和目的时钟路径，也可以表示为触发器+组合逻辑+触发器的模型  
+
+<img width="755" height="412" alt="image" src="https://github.com/user-attachments/assets/13a225ce-4b37-44e2-b9a4-0bcf3e104ce9" />
+
+接入到BUFG的时钟，会输出到全局时钟树   
+该时序模型的要求为  
+Tclk ≥ Tco + Tlogic + Trouting + Tsetup - Tskew  
+Tclk：原始进入路径的时钟clk，系统所能达到的最小时钟周期  
+Tco：进入发端寄存器reg1到输出的时间  
+Tlogic：组合逻辑布线延时  
+Trouting：金属线wire（硬件）延迟  
+Tsetup：第二级触发器reg2的时钟上升沿的建立时间  
+Tskew：时钟余量/时钟歪斜，同一个时钟边沿，到达发送端寄存器和接收端寄存器时钟引脚的时间差就是富余的时间，代表时序还有多少安全余量  
+
+<img width="610" height="358" alt="image" src="https://github.com/user-attachments/assets/e16c1511-a78f-47c8-be5d-aea5b45d0ca9" />
+
+<img width="609" height="341" alt="image" src="https://github.com/user-attachments/assets/b374ba55-eac0-461a-a596-eaa579288ebe" />
+
+<img width="940" height="471" alt="image" src="https://github.com/user-attachments/assets/b58f4da0-f740-4e5b-8cc0-7f2a2ee208b6" />
+
+> 代入计算时，直接把 Tskew 的带符号数值（+x 或 -x）套进 Tclk ≥ ... - Tskew 即可，符号由数值本身决定。
+> reg1 是发射端（源端）：它负责把数据“推”出去，所以驱动它的时钟沿叫 Launch Clock（发射沿）
+> reg2 是接收端（目的端）：它负责把数据“接”进来，所以驱动它的时钟沿叫 Capture Clock（捕获沿）
+> Tskew = Tcapture - Tlaunch = T(reg2的时钟到达时间) - T(reg1的时钟到达时间)。
+> 数据必须在**第2个上升沿（而不是下降沿）**之前稳定。\( T_{co}+T_{logic}+T_{routing} \) 是数据到达的最晚时间，加上 \( T_{setup} \) 就构成了总耗时
+
+时钟歪斜与时钟抖动的区别  
+|对比维度|时钟歪斜Skew|时钟抖动Jitter|
+|:---|:---|:---|
+|时间维度|同一个时钟边沿，多个寄存器|同一个寄存器，不同时钟边沿|
+|本质|静态，系统固定偏差|动态，随机噪声偏差|
+|主要成因|时钟树布线长短，缓冲器差异延迟|电源噪声，热噪声，PLL噪声|
+|可控性|布局布线阶段可大幅优化、补偿|只能抑制，无法彻底消除|
+|对建立裕量影响|正向skew提升建立裕量|永远消耗建立裕量，让时序更紧张|
+|对保持裕量影响|正向skew降低保持裕量|对保持时间影响很小|
+
+类比  
+把时钟比作学校打铃:  
+-Skew(歪斜):同一个打铃信号,教学楼A的铃走线远,晚2秒响;教学楼B走线近,早2秒响;每天上课铃,两座楼铃的时间差固定为4秒,这就是skew;  
+-Jitter(抖动):同一座教学楼的铃,理想每天8:00响,实际有时7:59:59.8、有时8:00:00.3,每次响铃相对理想时间的随机偏移,就是抖动。
+
+工程总结  
+1.Skew 是空间上时钟到达不同位置的时差；Jitter是时间上同一个位置不同周期时钟边沿的波动;  
+2.时序分析必须同时预留抖动裕量、考量时钟歪斜，两者部会改变最终可获得的时序裕量Slack。  
+
+周期约束也叫做主时钟约束，主时钟通常有两种情形，一种是时钟由外部时钟源提供，通过时钟引脚进入FPGA,该时钟引脚绑定的时钟为主时钟；另一种是高速收发器的时钟RXOUTCLK或TXOUTCLK。对于7系列FPGA,需要对GT的这两个时钟手工约束：对于UltraScale系列芯片，只需要对GT的输入时钟约束即可，Vivado会自动对这两个时钟进行约束。
+
