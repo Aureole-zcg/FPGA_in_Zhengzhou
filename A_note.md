@@ -2563,11 +2563,11 @@ Tskew：时钟余量/时钟歪斜，同一个时钟边沿，到达发送端寄�
 
 <img width="940" height="471" alt="image" src="https://github.com/user-attachments/assets/b58f4da0-f740-4e5b-8cc0-7f2a2ee208b6" />
 
-> 代入计算时，直接把 Tskew 的带符号数值（+x 或 -x）套进 Tclk ≥ ... - Tskew 即可，符号由数值本身决定。
-> reg1 是发射端（源端）：它负责把数据“推”出去，所以驱动它的时钟沿叫 Launch Clock（发射沿）
-> reg2 是接收端（目的端）：它负责把数据“接”进来，所以驱动它的时钟沿叫 Capture Clock（捕获沿）
-> Tskew = Tcapture - Tlaunch = T(reg2的时钟到达时间) - T(reg1的时钟到达时间)。
-> 数据必须在**第2个上升沿（而不是下降沿）**之前稳定。\( T_{co}+T_{logic}+T_{routing} \) 是数据到达的最晚时间，加上 \( T_{setup} \) 就构成了总耗时
+> 代入计算时，直接把 Tskew 的带符号数值（+x 或 -x）套进 Tclk ≥ ... - Tskew 即可，符号由数值本身决定。  
+> reg1 是发射端（源端）：它负责把数据“推”出去，所以驱动它的时钟沿叫 Launch Clock（发射沿）  
+> reg2 是接收端（目的端）：它负责把数据“接”进来，所以驱动它的时钟沿叫 Capture Clock（捕获沿）  
+> Tskew = Tcapture - Tlaunch = T(reg2的时钟到达时间) - T(reg1的时钟到达时间)。  
+> 数据必须在**第2个上升沿（而不是下降沿）**之前稳定。\( T_{co}+T_{logic}+T_{routing} \) 是数据到达的最晚时间，加上 \( T_{setup} \) 就构成了总耗时  
 
 时钟歪斜与时钟抖动的区别  
 |对比维度|时钟歪斜Skew|时钟抖动Jitter|
