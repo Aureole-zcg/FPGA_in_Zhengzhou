@@ -1,4 +1,4 @@
-<img width="1123" height="644" alt="image" src="https://github.com/user-attachments/assets/a0890270-1547-4c5d-bbf3-2803b83baf25" />FPGA(Field Programmable Gate Array) 现场可编程门阵列  
+FPGA(Field Programmable Gate Array) 现场可编程门阵列  
 CPLD(Complex Programmable Logic Device) 复杂可编程逻辑器件  
 FPGA的前身是CPLD
 
@@ -2303,7 +2303,8 @@ FFT IP核通道数默认选1
 
 缩放整数数选择unscall  
 输入位宽和相位位宽都是16  
-optional output fields选择XK_INDEX，即打开用户端接口，data_user，16位宽（查一下干嘛用的）  
+optional output fields选择XK_INDEX，即打开用户端接口，data_user，16位宽   
+XK_INDEX 是 Xilinx FFT IP 核的一个可选输出信号，它的核心作用是为每一个输出的FFT结果数据点提供一个对应的索引号（即频率“地址”），以标明该数据在输出序列中的位置  
 >FFT IP核最根本的作用是执行快速傅里叶变换（FFT） 和逆傅里叶变换（IFFT）。它将复杂的时间信号分解为一系列不同频率的简单正弦波，从而在频域揭示信号的频率构成、幅度和相位等关键信息。这在数字信号处理（DSP）领域是一个基础且强大的工具。  
 
 FFT之后调用RAM完成FFT shift  
