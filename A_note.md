@@ -1534,6 +1534,30 @@ MRCC用完了可使用SRCC
 晶振经过MRCC再经过BUFG，时钟质量会更好  
 <img width="676" height="755" alt="image" src="https://github.com/user-attachments/assets/b59d64e0-487d-4bf3-b748-85cc8c510c85" />
 
+*MRCC* (Multi-region Clock Capable I/O)：多区域时钟引脚。它能将时钟信号从当前时钟区域，扩展到相邻的时钟区域。
+
+*SRCC* (Single-region Clock Capable I/O)：单区域时钟引脚。它的时钟信号只能在当前时钟区域内使用。
+
+每个I/O Bank都包含2对MRCC和2对SRCC引脚，它们都是差分对，使用单端时钟时需接在P端
+
+两者最本质的差异在于能否驱动 BUFMR（多区域时钟缓冲器）。  
+MRCC可以驱动BUFMR。BUFMR能将时钟信号扩展到最多三个时钟区域（本区域及上下相邻区域）。  
+SRCC无法驱动BUFMR。因此，其时钟信号被限制在当前时钟区域内。  
+除了BUFMR，它们在其他方面能力相同，都可以驱动BUFIO、BUFR、CMT (MMCM/PLL)、BUFG和BUFH等时钟资源。  
+
+| 特性 | MRCC (多区域时钟引脚) | SRCC (单区域时钟引脚) |
+| :--- | :--- | :--- |
+| **核心能力** | 可驱动 **BUFMR**，将时钟扩展到相邻区域 | **不能**驱动BUFMR |
+| **时钟覆盖范围** | **当前及相邻**的时钟区域 | **仅当前**时钟区域 |
+| **典型应用场景** | 需为**多个相邻Bank**提供时钟，或作为时钟信号源驱动复杂的时钟网络 | 时钟信号**仅在本Bank内**使用，如驱动一个高速ADC/DAC接口 |
+| **全局时钟能力** | **可以**，通过BUFG接入全局时钟网络 | **可以**，通过BUFG接入全局时钟网络 |
+
+**优先使用SRCC**：如果时钟信号**只在本Bank内使用**（如驱动一个高速接口），SRCC完全足够。  
+**必须使用MRCC**：当需要**为多个相邻Bank提供同一时钟**时，必须使用MRCC并配合BUFMR。  
+**两者均可**：对于需要**全局时钟（BUFG）** 的情况，MRCC和SRCC均可胜任，此时选择哪个都行。
+
+ **专用引脚**：外部时钟**必须**通过MRCC或SRCC这类专用引脚引入，连接到普通I/O会引发严重警告甚至错误。  
+**7系列专属**：MRCC和SRCC是**7系列及之前**架构的命名方式。在更新的**UltraScale/UltraScale+** 架构中，统一称为 **GC (Global Clock)** 引脚。
 
 原语和IP核的区别  
 原语是已存在的一部分的电路，数量是固定的，device里没有就不能用(IBUFGDS)，直接映射FPGA物理资源(LUT、BRAM、DSP、I/O)，从语言模版调用(消耗底层资源和硬件资源);  
