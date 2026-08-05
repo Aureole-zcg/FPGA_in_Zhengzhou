@@ -1325,15 +1325,15 @@ FLASH 按块擦除
 
 <img width="1720" height="758" alt="image" src="https://github.com/user-attachments/assets/3d18b24a-6f62-4986-a4c4-a83aea5ba4d9" />
 ```
-iic_clk：用于i2c_ctrl模块的时钟，用于产生SCL和SDA的变化
-rst_n：手写复位信号，低电平有效，当rsr_n为高时，时钟信号正常使用
-wren/rden：（i2c_cmd）写使能，读使能，代表进行的是写操作还是读操作
-i2c_start：开始标志信号
-addr_num：存储地址字节数，0代表1个字节，1代表2个字节
-byte_addr：EEPROM字地址（存储地址）
-wr_data[7:0]：发送数据字节
-i2c_wr_rd_done：写操作/读操作完成信号
-rd_data[7:0]：读出数据字节
+iic_clk：用于i2c_ctrl模块的时钟，用于产生SCL和SDA的变化  
+rst_n：手写复位信号，低电平有效，当rsr_n为高时，时钟信号正常使用  
+wren/rden：（i2c_cmd）写使能，读使能，代表进行的是写操作还是读操作  
+i2c_start：开始标志信号  
+addr_num：存储地址字节数，0代表1个字节，1代表2个字节  
+byte_addr：EEPROM字地址（存储地址）  
+wr_data[7:0]：发送数据字节  
+i2c_wr_rd_done：写操作/读操作完成信号  
+rd_data[7:0]：读出数据字节  
 ```
 从机地址：7'b1010011
 
