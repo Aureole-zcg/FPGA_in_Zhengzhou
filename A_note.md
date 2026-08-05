@@ -1324,6 +1324,7 @@ FLASH 按块擦除
 <img width="1349" height="1220" alt="image" src="https://github.com/user-attachments/assets/0fa58698-1b51-48b9-9d6f-ad3ea587f531" />
 
 <img width="1720" height="758" alt="image" src="https://github.com/user-attachments/assets/3d18b24a-6f62-4986-a4c4-a83aea5ba4d9" />
+
 ```
 iic_clk：用于i2c_ctrl模块的时钟，用于产生SCL和SDA的变化  
 rst_n：手写复位信号，低电平有效，当rsr_n为高时，时钟信号正常使用  
@@ -1335,6 +1336,7 @@ wr_data[7:0]：发送数据字节
 i2c_wr_rd_done：写操作/读操作完成信号  
 rd_data[7:0]：读出数据字节  
 ```
+
 从机地址：7'b1010011
 
 <img width="2754" height="999" alt="image" src="https://github.com/user-attachments/assets/c0cacda4-faa8-41e7-9309-bff2303e6bb3" />
