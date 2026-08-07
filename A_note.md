@@ -1390,7 +1390,7 @@ FLASH 按块擦除
 
 SL24C64：  
 存储器组织结构：256页 X 32字节 (64K bits)   
-IIC控制EEPROM工程里将50MHz时钟分频为1MHz用于输出配套SDA的SCL，再将1MHz四分频为250KHz实现SDA数据传输  
+IIC控制EEPROM工程里将50MHz时钟分频为1MHz用于输出配套SDA的计数器时钟，再将1MHz四分频为250KHz实现SCL传输  
 A0,A1,A2三个硬件地址输入引脚  
 
 
