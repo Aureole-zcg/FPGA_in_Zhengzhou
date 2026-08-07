@@ -1388,6 +1388,12 @@ EEPROM 电可擦除ROM 一次擦除一个字节
 EPROM 可擦除编程ROM 紫外线光擦除  
 FLASH 按块擦除
 
+SL24C64：  
+存储器组织结构：256页 X 32字节 (64K bits)   
+IIC控制EEPROM工程里将50MHz时钟分频为1MHz用于输出配套SDA的SCL，再将1MHz四分频为250KHz实现SDA数据传输  
+A0,A1,A2三个硬件地址输入引脚  
+
+
 <img width="1349" height="1220" alt="image" src="https://github.com/user-attachments/assets/0fa58698-1b51-48b9-9d6f-ad3ea587f531" />
 
 <img width="1720" height="758" alt="image" src="https://github.com/user-attachments/assets/3d18b24a-6f62-4986-a4c4-a83aea5ba4d9" />
@@ -1404,13 +1410,22 @@ i2c_wr_rd_done：写操作/读操作完成信号
 rd_data[7:0]：读出数据字节  
 ```
 
-从机地址：7'b1010011
+从机地址：7'b1010011  
+> 器件寻址(MSB)1010 A2 A1 A0(LSB)
+
+EEPROM的级联都是将SCL和SDA连在总线上，但是需要注意区分两片EEPROM的地址引脚连线，地址不能相同
+
+存储复位  
+当协议中产生中断、掉电或系统复位后,I2C总线可通过以下步骤复位:  
+(1)产生9个时钟周期。  
+(2)当SCL为高时,SDA也为高。  
+(3)产生一个起始条件（SCL高电平时，SDA为下降沿）。  
 
 <img width="2754" height="999" alt="image" src="https://github.com/user-attachments/assets/c0cacda4-faa8-41e7-9309-bff2303e6bb3" />
 
 <img width="3897" height="999" alt="image" src="https://github.com/user-attachments/assets/6c67f77a-68f2-4249-9937-1ea3b8691817" />
 
-
+在芯片内部，FLASH和EEPROM存储“1”和“0”的物理方式是相同的，都是通过浮栅上的电荷来实现。它们的主要区别在于外部操作的粒度：EEPROM可以按字节精细操作，而FLASH则需要按块进行擦除。
 
 2026/5/20 Clock stretching
 ---
