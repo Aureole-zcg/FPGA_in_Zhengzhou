@@ -1462,6 +1462,9 @@ SDRAM：SDRAM英文全称“Synchronous Dynamic Random Access Memory”，译为
 
 SELF REFRESH和AUTO REFRESH不同，如果 CKE 为高电平，刷新命令将处于自动刷新模式；如果 CKE 为低电平，则处于自我刷新(self refresh)模式。进入自我刷新模式后，该设备会使用自身的内部时钟来维持正常运作，从而能够自动执行刷新操作。该设备必须至少保持自我刷新模式 tRAS（激活到预充电命令间隔时间）所规定的时间长度，之后则可以无限期地保持在该模式下。
 
+8192行就等于8192页，SDRAM的1024列，每列能存16bit数据  
+一共4个bank，一个bank有8192页，一页1024列，一列16bit数据
+
 2023/5/26 OV5640
 ---
 类IIC协议：SCCB协议  
