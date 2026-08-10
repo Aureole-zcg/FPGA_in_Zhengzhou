@@ -1841,6 +1841,8 @@ MT41K256M16 （单个颗粒）的内部结构是一种层级式的组织方式�
 *   **数据宽度**：**16 位**
 *   **页大小 (Page Size)**：**2KB**
 
+几个颗粒组成一组就是一个rank，对于内存条，正反面都有颗粒，那么正面可以叫一个rank，背面为另一个rank
+
 2026/6/16 mig IP核
 ---
 sys_clk_i 200MHz 系统晶振时钟 200x4片颗粒x差分时钟等效=1600MHz  
@@ -1857,6 +1859,16 @@ app_addr 操作地址，按照结构从高位到低位
 rank(1) + bank(3) + row(15) + column(10) =29  
 >虽然操作地址是告诉所有颗粒在同一个相同地址位置开始写，但由于app_wdf_data是512位宽，每个颗粒都拿不同的部分  
 >512/4（个时钟周期）/2（差分时钟速率二倍）/4（个颗粒）=512/4/2/4=16所以虽然位置相同但是数据是不同的
+
+app_cmd 操作命令，3'b000（写入）和3'b001（读出）  
+写时序  
+<img width="865" height="419" alt="image" src="https://github.com/user-attachments/assets/b16c212a-2062-449b-a860-dc0e8130460b" />
+
+读时序  
+<img width="864" height="374" alt="image" src="https://github.com/user-attachments/assets/ad640c87-ca45-4fb7-9f13-ee99049b2885" />
+
+> 在app_rdy拉高的时候拉高app_en，地址app_addr 才是有效的
+> 在app_wdf_rdy拉高的时候拉高app_wdf_wren，写入数据app_wdf_data 才是有效的
 
 init_calib_complete 初始化校验完成信号  
 56us（55.45us)后初始化校验完成信号为1的情况才能开启两个rdy  
