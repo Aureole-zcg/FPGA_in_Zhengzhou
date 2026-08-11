@@ -2954,6 +2954,13 @@ ping操作主要是为了保证远距离传输时通讯链路正常
 Wireshark操作  
 双击打开以太网 → 数据包内容从目的MAC地址到用户数据，不包含前导，帧间隔和尾帧 (→ 停止操作：两次ctrl C) → 右击IP设为过滤器可以查看与该IP有关的数据包
 
+<img width="1273" height="361" alt="image" src="https://github.com/user-attachments/assets/3a3cd40d-b271-4f4c-8688-590fb87b45b0" />
+
+<img width="1097" height="725" alt="image" src="https://github.com/user-attachments/assets/be884dd7-eeb3-4873-93b4-81b906c17a3c" />
+
+<img width="1176" height="657" alt="image" src="https://github.com/user-attachments/assets/83615dea-71f4-4a8f-8d1e-bf529ba56b50" />
+
+
 网络调试助手操作：  
 协议类型 UDP → 主机地址192.168.10.2 → 端口号61441 → 打开 → 远程主机192.168.10.1 :61440 → 勾选接收数据不显示
 
