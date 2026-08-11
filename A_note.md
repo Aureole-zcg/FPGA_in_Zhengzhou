@@ -2643,7 +2643,8 @@ Xilinx 的 FFT IP 核（以及所有标准 FFT 算法）在输出数据时，默
 -索引 1024 ~ 2047 对应 负频率（-Fs/2 ~ 0Hz）。  
 ）  
 7.求幅度，平方后求和再开方  
-8.RAM进行缓存  
+8.RAM进行缓存，RAM写时钟230.4，读时钟15.625MHz，且读数据位宽为64位，用于对应下一步千兆网UDP协议找的app_tx_data[63:0]数据端口
+
 
 ---
 关于VIO：  
@@ -2669,9 +2670,311 @@ VIO截位逻辑，就是在芯片运行期间，通过上位机软件调节5个�
 代码后期不再使用Tcl调试时，保留 Case 结构，不删除 VIO 核，但用宏定义（`define）或参数（parameter）来控制数据流向。  
 
 
+2026/7/17 千兆网
+---
+千兆网芯片型号  
+K7板卡使用：B50610 (4bit)  
+V7板卡使用：88E1111 (8bit)  
+
+时钟通过锁相环输出时钟15.625MHz，200MHz，125MHz  
+千兆网1000Mbit/s  
+8位并行数据 → 125MHz x 8bit  
+
+HMC7044，ADS42LB69的SPI配置时钟都由锁相环提供  
+ADS42LB69的采样时钟，工作时钟由HMC7044提供  
+> 表述千兆网结构前需要先叙述时钟系统
+
+ADS42LB69的SEND发送模块输出的数据是64位宽，供千兆网使用  
+千兆网使用芯片88E1111  
+88E1111可以切换三种接口（三速以太网mac核  tri_mode_ethernet_mac）  
+.dcp文件是UDP协议栈使用的网表文件，往常由公司提供
+
+> udp_ip_protocol_stack.dcp这个网表文件，这个网表文件主要是处理通信协议的，所以可以叫做协议栈。可以将它理解成1个IP核，这个核具备UDP、ARP、PING功能，不需要编写程序来实现完备的千兆以太网通信功能了。在以后的工作中，可能会使用万兆通信，或者传输速度更高的100G通信，均是采用IP核的设计。  
+
+千兆以太网整体设计   
+<img width="865" height="104" alt="image" src="https://github.com/user-attachments/assets/4a824b8c-9c9b-44eb-a4cc-c5c235be127e" />
+
+UDP协议栈 64位宽 同步时钟信号：125MHz/(64/8)=15.625MHz
+三速以太网mac核 8位宽 125MHz  
+FIFO链路：  
+宽UDP协议栈 → 三速以太网mac核  
+1.跨时钟域处理 15.625MHz → 125MHz  
+2.跨位宽处理 64bit → 8bit  
+异步FIFO - 同步FIFO - AXIS异步跨位宽FIFO  
+
+接口类型（千兆连接方式）  
+B50610 (4bit) : RGMII(4bit)  
+88E1111 (8bit) : GMII(8bit), RGMII(4bit), SGMII（串行）  
+
+GMII（Gigabit Media independent Interface, 千兆介质独立接口）  
+> GMII单沿采样，RGMII双沿采样
+
+88E1111的 GMII, RGMII共用引脚线，SGMII有单独引脚线
+
+RJ45/RJ11 网口连接器   
+> K7板卡使用HY91130A，其物理结构内部有线圈
+
+<img width="1249" height="285" alt="image" src="https://github.com/user-attachments/assets/20cc8867-51e9-4d5f-913d-1a7c2635d6e7" />
+
+连接架构：ADC→FPGA→UDP协议栈→FIFO链路→三速以太网mac核→PHY芯片→RJ45→上位机  
+>回应：上位机→RJ45→PHY→三速以太网mac核→FIFO链路→UDP协议栈
+
+udp_ip_protocol_stack UDP协议栈  
+UDP协议栈在OSI中处于传输层  
+> 区分UDP和TCP/IP的写法
+
+<img width="678" height="477" alt="image" src="https://github.com/user-attachments/assets/53f1ede2-24aa-4438-873c-564a5a44fc76" />
+
+<img width="988" height="281" alt="image" src="https://github.com/user-attachments/assets/33b6734e-08b4-4c18-9ab6-5e77acced763" />
+
+UDP协议栈 IP核能自动拼接输出目的MAC地址到数据段
+>MAC地址6字节 IP地址4字节
+
+前导码，SFD（帧起始位置分隔符），FCS（帧尾）由三速以太网mac核拼接
+
+前导码： 8 字节， 连续7个8'h55加1个 8'hd5， 表示一个帧的开始， 用于双方设备数据的同步。
+
+SFD： 帧起始位置分隔符(Start frame delimiter ,SFD：10101011)最后两个1让接收方能够识别	 中间的0和1交替模式，进而同步并检查到数据开头
+
+目的MAC地址： 6字节，存放目的设备的物理地址，即MAC地址
+
+源MAC地址： 6字节，存放发送端设备的物理地址，即MAC地址
+
+类型： 2字节，用于指定协议类型，常用的有0800表示IP协议，0806表示ARP协议
+
+FCS： 帧尾，4字节，为帧校验序列，采用32位CRC校验，对目的MAC地址字段到数据字段进行校验  
+> 判定是否出错，类似GPS最后的俩校验位，循环冗余校验Cyclic Redundancy Check
+
+主机PC配置端口号f001，IP地址32'hc0a80a02   
+FPGA内部端口号f000，IP地址32'hc0a80a01，MAC地址48'h000a35000102
+
+<img width="1246" height="858" alt="image" src="https://github.com/user-attachments/assets/16126a67-4ae1-4b9d-9790-44a21f180607" />
+
+2026/7/18 AXIS
+---
+AXIS   
+>S: Stream 流
+
+AXIS分主机和从机   
+千兆网连接架构整体呈回环形式  
+
+<img width="574" height="529" alt="image" src="https://github.com/user-attachments/assets/b2c2e9dc-e737-44a4-896e-a9b8015a8095" />
+
+从机发送：  
+dst_ip_unreachable：目的IP不可达，高电平为找不到IP地址，该信号实际为双向信号
+
+主机发送：  
+app_tx_data[63:0]，协议栈所用的64位宽数据  
+app_tx_data_keep[7:0]，正常情况下全1  
+app_tx_data_last，发送完毕拉高一个周期，伴随app_tx_data[63:0]
+
+时序（AXIS的握手协议）：  
+1.AXIS由从机先发udp_tx_ready，  
+2.主机app_tx_data_request，  
+3.app_tx_ack（从机应答信号）同时（或稍前）发送dst_ip_unreachable  
+4.app_tx_data_valid  
+5.app_tx_data[63:0]，app_tx_data_keep[7:0]，app_tx_data_last，udp_data_length[15:0]
 
 
+<img width="569" height="299" alt="image" src="https://github.com/user-attachments/assets/56001290-b35b-4b95-abc8-caa78faa57b4" />
 
+app_rx_data[63:0]和app_rx_data_keep[7:0]对应关系为8 : 1  
+8个keep全为1，数据64位才都有效
+
+AXI总线概述  
+在ZYNQ中有支持三种AXI总线，拥有三种AXI接口，当然用的都是AXI协议。其中三种AXI总线分别为:  
+AXI4: (For high-performance memory-mapped requirements.)主要面向高性能地址映射通信的需求，是面向地址映射的接口，允许最大256轮的数据突发传输;  
+AX14-Lite: (For simple, low-throughput memory-mapped communication)是一个轻量级的地址映射单次传输接口，占用很少的逻辑单元。  
+AX14-Stream:(For high-speed streaming data.)面向高速流数据传输；去掉了地址项，允许无限制的数据突发传输规模。  
+
+AXI4总线和AXI4-Lite总线具有相同的组成部分:  
+(1)读地址通道，包含 ARVALID, ARADDR, ARREADY 信号;  
+(2)读数据通道，包含RVALID,RDATA,RREADY, RRESP信号;  
+(3)写地址通道，包含AWVALID，AWADDR,AWREADY信号;   
+(4)写数据通道,包含WALID,WDATA,WSTRB,WREADY信号;  
+(5)写应答通道，包含BVALID,BRESP,BREADY信号;  
+(6)系统通道，包含:ACLK，ARESETN信号。  
+>没有读应答通道，具体信号名以手册为准  
+
+AXI4总线和AXI4-Lite总线的信号也有他的命名特点:  
+读地址信号都是以AR开头(A:address;R:read)  
+写地址信号都是以AW开头(A:address;W:write)  
+读数据信号都是以R开头(R:read)  
+写数据信号都是以W开头(W:write)  
+应答型号都是以B开头(B:back(answer back))  
+
+<img width="1165" height="563" alt="image" src="https://github.com/user-attachments/assets/783608b1-e818-4adc-ab72-03db8dbb78e7" />
+
+具体AXI类型依据手册决定
+
+UDP协议栈的作用  
+1.拼包（UDP包格式）  
+2.UDP协议，ARP协议，ICMP协议  
+3.MAC地址，端口号
+
+三速以太网mac核主要用来切换接口类型  
+使用类IIC协议MDC/MDIO配置PHY芯片切换端口类型和千兆网百兆网模式
+
+Xilinx IP Catalog 搜ETH   
+
+<img width="439" height="183" alt="image" src="https://github.com/user-attachments/assets/b3de501d-db11-4bc3-8fdf-766701f691cc" />
+
+Data Rate: 1Gbps, 2.5Gbps  
+RGMII, GMII, MII可由三速以太网mac核切换，SGMII不可以
+
+<img width="795" height="259" alt="image" src="https://github.com/user-attachments/assets/daf11814-ce28-4992-b836-3be75fcfc094" />
+
+共享逻辑IP核在SRIO    
+
+<img width="882" height="137" alt="image" src="https://github.com/user-attachments/assets/58226460-49ad-4714-991e-91f5b8a2d88d" />
+
+PCS IP核配置SGMII  
+SGMII使用625MHz时钟，理论传输速率1.25Gb/s，实际传输速率不超过1G(800 ~ 850M)
+
+2026/7/18 88E1111
+---
+88E1111 PHY芯片，由迈威尔（美满）公司生产   
+项目可以先使用B50610进行测试
+
+
+<img width="576" height="472" alt="image" src="https://github.com/user-attachments/assets/486692cc-bafb-4651-8fca-3ae76cc67ff6" />
+
+> TBI 千兆以太网接口
+
+
+<img width="850" height="800" alt="image" src="https://github.com/user-attachments/assets/8a25b50c-2675-45ab-baed-8fa781c5d585" />
+
+类IIC协议  
+
+<img width="616" height="179" alt="image" src="https://github.com/user-attachments/assets/bde55207-5b3f-4094-ab24-2271ff7b1b1b" />
+
+MDC 是串行管理接口的管理数据时钟参考。不需要连续的时钟流。支持的最高频率为 8.3 MHz。  
+MDIO 是管理数据。MDIO 传输设备与 MDC 同步进出管理数据。此引脚需要上拉一个电阻范围： 1.5 kohm 到 10 kohm
+
+IIC控制EEPROM工程里将50MHz时钟分频为1MHz用于输出配套SDA的计数器时钟，再将1MHz四分频为250KHz实现SCL传输
+
+Gigabit Media Independent Interface (GMII/MII) 千兆媒体独立接口
+
+<img width="307" height="271" alt="image" src="https://github.com/user-attachments/assets/1e944779-02d1-4d1d-a403-cba4ea1ad2fd" />
+
+GTX_CLK 千兆网时钟 125MHz  
+>1000MHz /8
+
+百兆：25MHz 数据4位宽  
+十兆：2.5MHz 数据4位宽
+
+<img width="378" height="272" alt="image" src="https://github.com/user-attachments/assets/e4b13992-8ae3-4c37-9937-1f216049af98" />
+
+选择对应时钟可切换GMII/MII  
+>MII (10/100M)模式：切换到 TX_CLK 作为发送参考时钟，频率根据速率变为 25MHz或2.5MHz。  
+>在MII模式下，只使用8根数据线中的4根（TXD[3:0]/RXD[3:0]）
+
+
+<img width="586" height="395" alt="image" src="https://github.com/user-attachments/assets/00780ec0-75ed-4a78-877c-0498fed5417d" />
+
+CRS：GMII接口的Carrier Sense(载波侦测信号)，当接收媒介非空闲的时候，该信号是有效的  
+COL：GMII接口的Collision(冲突信号)，在全双工的千兆通信中，该信号一直为低，在半双工模式中，如果接收和发送媒介都是非空闲的时候，该信号有效
+
+RGMII (Reduced Pin Count GMII)
+
+<img width="340" height="204" alt="image" src="https://github.com/user-attachments/assets/a1b44b16-ae54-42ef-9248-9141db55c98f" />
+
+双沿采样  
+时钟125MHz，发送和接收都是125MHz  
+实际引脚名为TX_CTL和RX_CTL  
+⭐相对接口较少，一般情况使用RGMII
+
+SGMII  串行接口
+
+<img width="354" height="120" alt="image" src="https://github.com/user-attachments/assets/7ac9be9d-df38-4692-8b5c-23d9058f05c4" />
+
+使用SGMII时PHY为差分信号线  
+1250Mb/s传输速率  
+吞吐量：Lane数量(1) x 传输速率(1.25Gb/s)  
+>1.25G原因:8位数据编码为10位码字（8B to 10B）来平衡数据传输中的直流偏置，并实现数据传输的同步，正常1G  
+>8B to 10B避免连续三个以上0或1  
+>2^8 → 2^10
+
+SGMII时钟频率625MHz  
+SerDes：串并转换  
+>/ˈsɜːrdez/  
+
+类型切换方式：
+1.三速以太网MAC核
+2.PCS配置SGMII
+3.硬件配置，杜邦线直接连接LED和CONFIG
+
+硬件配置
+
+<img width="230" height="218" alt="image" src="https://github.com/user-attachments/assets/d9b93f8a-aa74-4fc5-ac37-13d69b35b13a" />
+
+<img width="606" height="323" alt="image" src="https://github.com/user-attachments/assets/7b2c7e73-3ef2-4c78-a340-b2729a93b2fd" />
+
+<img width="556" height="283" alt="image" src="https://github.com/user-attachments/assets/b908fc99-d1a4-4376-9494-148efcd32d44" />
+
+<img width="951" height="521" alt="image" src="https://github.com/user-attachments/assets/43739dd6-1325-48d7-a3a6-24a55e970e31" />
+
+高位默认为0  
+LED_LINK1000连接给CONFIG4
+
+MDC和MDIO配置
+
+<img width="596" height="314" alt="image" src="https://github.com/user-attachments/assets/5535e3f6-7ba2-4b7c-93c3-90822c25ddb1" />
+
+| 起始位 | 读写控制位 | PHY地址 | 寄存器地址 | 
+一般不使用MDC和MDIO配置，使用IP核控制或CONFIG直连
+
+2026/7/18 千兆以太网操作
+---
+包含内容   
+1.ping操作  
+2.网络调试助手  
+3.wireshark
+ 
+ping操作   
+cmd命令：ping 192.168.10.1  
+>FPGA的IP地址
+
+PC端IP地址192.168.10.2
+
+栈结构： 网络协议栈指为完成网络通信而设计的一系列协议的分层集合。数据从应用程序出发，先经过UDP层（加端口号），再经过IP层（加IP地址），最后经过网卡层（转成电信号）发出去。接收时则反向剥除。这种“层层包裹、层层递进”的纵向结构，就是协议栈。
+
+ADC只提供UDP包中的用户数据部分，其他部分由UDP协议栈和三速以太网MAC核拼接  
+UDP协议栈可以自动生成UDP包结构  
+ARP协议作用  
+1.检测是否断电  
+2.检测接口更换后的新macd地址  
+ADS6142 (14bit位宽)可以代替测试ADS42LB69  
+
+ping操作：   
+控制面板 → 网络连接 → 以太网 → 属性 → IPv4改为192.168.10.2，子网掩码默认255.255.255.0 →烧录程序后cmd命令：ping 192.168.10.1，过程中检测XADC温度值，请求超时重新运行代码或重新插拔水晶头，ping 192.168.10.1 -t可循环重复ping操作   
+发包间隔需满足间隔时间 + 1000大于等于6400   
+ping操作主要是为了保证远距离传输时通讯链路正常   
+
+Wireshark操作  
+双击打开以太网 → 数据包内容从目的MAC地址到用户数据，不包含前导，帧间隔和尾帧 (→ 停止操作：两次ctrl C) → 右击IP设为过滤器可以查看与该IP有关的数据包
+
+网络调试助手操作：  
+协议类型 UDP → 主机地址192.168.10.2 → 端口号61441 → 打开 → 远程主机192.168.10.1 :61440 → 勾选接收数据不显示
+
+<img width="2125" height="1200" alt="image" src="https://github.com/user-attachments/assets/e96fb4f6-17ed-4d68-a53c-f7236a91ea6e" />
+
+任务管理器也可以看到发送或接收速率实际800 ~ 850Kbps左右
+
+<img width="927" height="146" alt="image" src="https://github.com/user-attachments/assets/bcd156a5-05fe-4e72-b4ea-02b410a567ab" />
+
+<img width="837" height="333" alt="image" src="https://github.com/user-attachments/assets/6242942e-0f4e-4777-8886-287bd05d68bd" />
+
+ping操作为ICMP协议
+
+<img width="835" height="441" alt="image" src="https://github.com/user-attachments/assets/54fa7200-2f7d-4ec8-b679-51d39b9d39d4" />
+
+<img width="986" height="125" alt="image" src="https://github.com/user-attachments/assets/06abbad5-675b-4857-8c13-3c120823a584" />
+
+<img width="1497" height="350" alt="image" src="https://github.com/user-attachments/assets/066d8980-f642-4827-8943-74a625b8a8f9" />
+
+
+![Uploading image.png…]()
 
 
 
