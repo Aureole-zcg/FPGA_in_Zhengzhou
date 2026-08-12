@@ -2985,7 +2985,7 @@ ping操作为ICMP协议
 <img width="1497" height="350" alt="image" src="https://github.com/user-attachments/assets/066d8980-f642-4827-8943-74a625b8a8f9" />
 
 
-![Uploading image.png…]()
+<img width="741" height="547" alt="image" src="https://github.com/user-attachments/assets/5ebb826e-c294-4f96-87d0-bf2769696e81" />
 
 
 
@@ -3331,6 +3331,11 @@ IBERT可以和mig核一样直接生成例化文件
 Sources→IP Sources→右键ibert IP→Open IP Example Design  
 在例化项目顶层文件中，需要添加两个输出用于连接SFP的输出管脚TX ,并赋值为0以确保有效  
 然后添加这两个引脚的.xdc，添加引脚号，引脚标准LVCMOS33以及引脚名称  
+
+<img width="741" height="547" alt="image" src="https://github.com/user-attachments/assets/733e136d-df9c-49d0-9b75-0bfb8bece962" />
+
+> set_property -dict {PACKAGE_PIN A18 IOSTANDARD LVCMOS33} [get_ports sfp1_disable]  
+> set_property -dict {PACKAGE_PIN A20 IOSTANDARD LVCMOS33} [get_ports sfp2_disable]
 
 测试需要上板，并固化bit流文件，SFP光模块的插拔使用接口拉环
 
