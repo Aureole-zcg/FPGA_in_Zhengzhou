@@ -1,4 +1,4 @@
-<img width="1497" height="991" alt="image" src="https://github.com/user-attachments/assets/3c6c90cc-7981-4099-b2dc-1810a1268243" />FPGA(Field Programmable Gate Array) 现场可编程门阵列  
+FPGA(Field Programmable Gate Array) 现场可编程门阵列  
 CPLD(Complex Programmable Logic Device) 复杂可编程逻辑器件  
 FPGA的前身是CPLD
 
