@@ -3469,7 +3469,7 @@ Tskew：时钟余量/时钟歪斜，同一个时钟边沿，到达发送端寄�
 5. 其他约束:如保持时间、时钟不确定性等补充约束。  
 
 .xdc时序约束命令  
-create_clock -name <name> -period <period> -waveform {<rise_time> <fall_time>} [get_ports <input_port>]  
+create_clock -name \<name> -period \<period> -waveform {<rise_time> <fall_time>} [get_ports <input_port>]  
 |参数|含义|
 |:---|:---|
 |-name|时钟名称|
