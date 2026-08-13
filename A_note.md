@@ -2131,6 +2131,9 @@ SPI配置寄存器
 
 <img width="571" height="795" alt="image" src="https://github.com/user-attachments/assets/9d82b47f-2bed-4568-8dfb-e8b280dda2a4" />
 
+所以在DDR模式下，ADS42LB69是先发送偶数位 (Even Bits)，再发送奇数位 (Odd Bits)。  
+- 偶数位 (D0, D2, D4, ...)：在 CLKOUTP 的上升沿 输出。  
+- 奇数位 (D1, D3, D5, ...)：在 CLKOUTP 的下降沿 输出。
 
 配置寄存器的方式：1.手册 2.GUI 3.官网已配置好的复位  
 
