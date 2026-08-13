@@ -1,4 +1,4 @@
-FPGA(Field Programmable Gate Array) 现场可编程门阵列  
+<img width="1497" height="991" alt="image" src="https://github.com/user-attachments/assets/3c6c90cc-7981-4099-b2dc-1810a1268243" />FPGA(Field Programmable Gate Array) 现场可编程门阵列  
 CPLD(Complex Programmable Logic Device) 复杂可编程逻辑器件  
 FPGA的前身是CPLD
 
@@ -2985,7 +2985,8 @@ ping操作为ICMP协议
 <img width="1497" height="350" alt="image" src="https://github.com/user-attachments/assets/066d8980-f642-4827-8943-74a625b8a8f9" />
 
 
-<img width="741" height="547" alt="image" src="https://github.com/user-attachments/assets/5ebb826e-c294-4f96-87d0-bf2769696e81" />
+<img width="1497" height="991" alt="image" src="https://github.com/user-attachments/assets/eef960ed-2cc1-4819-b2ca-15d77fa264cb" />
+
 
 
 
